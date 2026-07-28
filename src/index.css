@@ -1,0 +1,682 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-background: var(--background);
+  --color-accent: var(--accent);
+  --color-cream: var(--cream);
+  --color-champagne: var(--champagne);
+  --color-rosegold: var(--rosegold);
+  --color-vintageText: var(--vintageText);
+  --color-darkText: var(--darkText);
+  --color-borderPink: var(--borderPink);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+
+  --font-heading: 'Playfair Display', serif;
+  --font-subtitle: 'Cormorant Garamond', serif;
+  --font-body: 'Poppins', sans-serif;
+
+  --shadow-soft-glow: var(--shadow-soft-glow);
+  --shadow-luxury: var(--shadow-luxury);
+  --shadow-premium: var(--shadow-premium);
+
+  --radius-premium-lg: 24px;
+  --radius-premium-md: 18px;
+}
+
+:root {
+  /* Warm Sepia Botanical Light Mode values */
+  --primary: #FF8DB3;      /* Accent Pink */
+  --secondary: #FFF1F7;    /* Secondary Pink */
+  --background: #FFF8F2;   /* Vintage Light Sepia Background */
+  --accent: #FF8DB3;       /* Rose Accent */
+  --cream: #FFF4E6;        /* Soft Cream */
+  --champagne: #F6E8D5;    /* Parchment Accent */
+  --rosegold: #C89F65;     /* Antique Gold */
+  --vintageText: #4B3B45;  /* Dark Plum Text for readability */
+  --darkText: #4B3B45;     /* Heading Text */
+  --borderPink: #E6D5D8;
+  --success: #8FB996;
+  --warning: #F2C57C;
+  --error: #E57373;
+  --shadow-soft-glow: 0 8px 30px rgba(255, 141, 179, 0.2);
+  --shadow-luxury: 0 10px 40px -10px rgba(75, 59, 69, 0.08);
+  --shadow-premium: 0 20px 50px -12px rgba(200, 159, 101, 0.15);
+  
+  --card-bg: #FFFDF8;      /* Cream Parchment Card */
+  --panel-bg: rgba(255, 253, 248, 0.75);
+  --sidebar-bg: linear-gradient(135deg, #4A3025 0%, #2A1810 100%); /* Old Leather Cover */
+  --navbar-bg: rgba(255, 253, 248, 0.65);
+  --bg-gradient: radial-gradient(circle at 10% 20%, rgba(255, 241, 247, 0.6) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(246, 232, 213, 0.5) 0%, transparent 50%), #FFF8F2;
+  
+  --gold-inner-border: rgba(200, 159, 101, 0.55);
+  --button-primary-bg: radial-gradient(circle, #FF8DB3 0%, #E06C92 100%);
+  --button-primary-text: #FFFFFF;
+  --button-glow: 0 4px 14px rgba(224, 108, 146, 0.35);
+  --glow-hover-color: rgba(224, 108, 146, 0.55);
+  --input-bg: rgba(255, 244, 230, 0.55);
+  --input-focus-border: #FF8DB3;
+  --primary-glow: rgba(255, 141, 179, 0.25);
+  --slider-track-bg: rgba(200, 159, 101, 0.25);
+  --divider-color: rgba(200, 159, 101, 0.3);
+
+  --calendar-period-bg: rgba(255, 141, 179, 0.15);
+  --calendar-period-border: rgba(255, 141, 179, 0.35);
+  --calendar-period-text: #be123c;
+  
+  --calendar-ovulation-bg: rgba(242, 197, 124, 0.25);
+  --calendar-ovulation-border: rgba(242, 197, 124, 0.5);
+  --calendar-ovulation-text: #b45309;
+  
+  --calendar-fertile-bg: rgba(143, 185, 150, 0.25);
+  --calendar-fertile-border: rgba(143, 185, 150, 0.4);
+  --calendar-fertile-text: #065f46;
+  
+  --calendar-appointment-bg: rgba(14, 165, 233, 0.15);
+  --calendar-appointment-border: rgba(14, 165, 233, 0.3);
+  --calendar-appointment-text: #0369a1;
+  
+  --calendar-medicine-bg: rgba(147, 51, 234, 0.15);
+  --calendar-medicine-border: rgba(147, 51, 234, 0.3);
+  --calendar-medicine-text: #6b21a8;
+
+  --today-glow: rgba(200, 159, 101, 0.35);
+}
+
+.dark {
+  /* Antique Candle-Lit Dark Gothic values */
+  --primary: #E89AB5;      /* Gothic Pink Accent */
+  --secondary: #161111;    /* Deep Gothic Red-Brown */
+  --background: #0E0A0A;   /* Black Gothic Paper */
+  --accent: #E89AB5;       
+  --cream: #241A19;        
+  --champagne: #1B1313;    
+  --rosegold: #C9A06A;     
+  --vintageText: #D8CFC7;  
+  --darkText: #F7EFEA;     
+  --borderPink: rgba(233, 200, 170, 0.18); 
+  --success: #789B7E;
+  --warning: #C89C62;
+  --error: #B55F5F;
+  --shadow-soft-glow: 0 8px 30px rgba(232, 154, 181, 0.12);
+  --shadow-luxury: 0 10px 40px -10px rgba(0, 0, 0, 0.75);
+  --shadow-premium: 0 20px 50px -12px rgba(201, 160, 106, 0.12);
+  
+  --card-bg: #241A19;      /* Gothic Card Background */
+  --panel-bg: rgba(33, 23, 23, 0.85);
+  --sidebar-bg: linear-gradient(135deg, #1B1313 0%, #0F0A0A 100%);
+  --navbar-bg: #211717;
+  --bg-gradient: radial-gradient(circle at 10% 20%, rgba(255, 213, 154, 0.08) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(201, 160, 106, 0.08) 0%, transparent 50%), #0E0A0A;
+  
+  --gold-inner-border: rgba(201, 160, 106, 0.45);
+  --button-primary-bg: radial-gradient(circle, #E89AB5 0%, #C57E97 100%);
+  --button-primary-text: #0E0A0A;
+  --button-glow: 0 4px 20px rgba(232, 154, 181, 0.15);
+  --glow-hover-color: rgba(232, 154, 181, 0.25);
+  --input-bg: rgba(22, 17, 17, 0.65);
+  --input-focus-border: #E89AB5;
+  --primary-glow: rgba(232, 154, 181, 0.1);
+  --slider-track-bg: rgba(201, 160, 106, 0.2);
+  --divider-color: rgba(201, 160, 106, 0.25);
+
+  --calendar-period-bg: rgba(232, 154, 181, 0.12);
+  --calendar-period-border: rgba(232, 154, 181, 0.25);
+  --calendar-period-text: #E89AB5;
+  
+  --calendar-ovulation-bg: rgba(215, 180, 106, 0.12);
+  --calendar-ovulation-border: rgba(215, 180, 106, 0.25);
+  --calendar-ovulation-text: #D7B46A;
+  
+  --calendar-fertile-bg: rgba(143, 185, 150, 0.12);
+  --calendar-fertile-border: rgba(143, 185, 150, 0.25);
+  --calendar-fertile-text: #8FB996;
+  
+  --calendar-appointment-bg: rgba(182, 154, 203, 0.12);
+  --calendar-appointment-border: rgba(182, 154, 203, 0.25);
+  --calendar-appointment-text: #B69ACB;
+  
+  --calendar-medicine-bg: rgba(182, 154, 203, 0.12);
+  --calendar-medicine-border: rgba(182, 154, 203, 0.25);
+  --calendar-medicine-text: #B69ACB;
+
+  --today-glow: rgba(201, 160, 106, 0.25);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-vintageText font-body antialiased;
+    background-image: var(--bg-gradient);
+    background-attachment: fixed;
+    min-height: 100vh;
+    transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading text-darkText font-medium tracking-wide;
+    transition: color 0.3s ease;
+  }
+  
+  input, textarea, select {
+    @apply focus:outline-none;
+    transition: all 0.3s ease;
+  }
+}
+
+/* Sidebar Elegant Journal Cover Style */
+aside.glass-panel {
+  background: var(--sidebar-bg) !important;
+  box-shadow: var(--sidebar-shadow) !important;
+  border-right: 4px double var(--rosegold) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Stitched leather boundaries */
+aside.glass-panel::before {
+  content: "";
+  position: absolute;
+  top: 10px; bottom: 10px; left: 10px; right: 10px;
+  border: 1px dashed var(--rosegold);
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.15; /* very soft stitching */
+}
+
+/* Gold embossed spine indentation line */
+aside.glass-panel::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 24px;
+  width: 1px;
+  background: var(--rosegold);
+  pointer-events: none;
+  opacity: 0.25;
+}
+
+/* Embellished text & icons */
+aside.glass-panel h1, 
+aside.glass-panel h4, 
+aside.glass-panel span, 
+aside.glass-panel button {
+  color: var(--sidebar-text) !important;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+aside.glass-panel p,
+aside.glass-panel svg {
+  color: var(--sidebar-icon) !important;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+/* Sidebar divider flower stamp */
+aside.glass-panel .elegant-divider {
+  position: relative;
+  background: var(--rosegold) !important;
+  opacity: 0.3;
+  z-index: 2;
+}
+
+aside.glass-panel .elegant-divider::after {
+  content: "🌿 🌸 🌿";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--sidebar-divider-bg);
+  padding: 0 8px;
+  font-size: 9px;
+  color: var(--rosegold);
+  opacity: 0.8;
+}
+
+.dark aside.glass-panel .elegant-divider::after {
+  background: #100B0A;
+}
+
+/* Navigation button bookmarks */
+aside button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+/* Active tab style: ribbon bookmark */
+aside button.bg-primary\/50 {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 15px rgba(255, 141, 179, 0.45) !important;
+  border-left: 5px solid var(--rosegold) !important;
+  border-radius: 4px 12px 12px 4px !important;
+  transform: translateX(6px);
+  z-index: 2;
+}
+
+/* Gold bookmark ribbon shape sticking out */
+aside button.bg-primary\/50::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 8px 0 8px 8px;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--rosegold);
+  pointer-events: none;
+  z-index: 3;
+}
+
+aside button.bg-primary\/50 svg {
+  color: #FFFFFF !important;
+}
+
+aside.glass-panel button:hover:not(.bg-primary\/50) {
+  background-color: rgba(200, 159, 101, 0.15) !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 0 8px rgba(200, 159, 101, 0.6);
+}
+
+/* Glassmorphism Cards: Vintage Parchment Page Style */
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--borderPink);
+  box-shadow: var(--shadow-luxury);
+  border-radius: 20px;
+  position: relative;
+  transition: background 0.6s ease, border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* Gold inner border line */
+.glass-card::before {
+  content: "";
+  position: absolute;
+  top: 6px; left: 6px; right: 6px; bottom: 6px;
+  border: 1px solid var(--gold-inner-border);
+  border-radius: 14px;
+  pointer-events: none;
+  opacity: 0.65;
+  transition: border 0.6s ease;
+}
+
+:root {
+  /* Warm Sepia Botanical Light Mode values */
+  --primary: #FF7FAF;      /* Soft Rose Accent */
+  --secondary: #FFF5F7;    /* Pastel Pink Background */
+  --background: #FFFDFB;   /* Milky White / Soft Cream Background */
+  --accent: #FF7FAF;       
+  --cream: #FFF5F7;        
+  --champagne: #FDF9F8;    
+  --rosegold: #C9A06A;     /* Rose Gold */
+  --vintageText: #4B3B45;  /* Dark Plum Text */
+  --darkText: #4B3B45;     
+  --borderPink: rgba(255, 127, 175, 0.15);
+  --success: #8FB996;
+  --warning: #F2C57C;
+  --error: #E57373;
+  --shadow-soft-glow: 0 8px 30px rgba(255, 127, 175, 0.15);
+  --shadow-luxury: 0 10px 40px -10px rgba(75, 59, 69, 0.05);
+  --shadow-premium: 0 20px 50px -12px rgba(201, 160, 106, 0.12);
+  
+  --card-bg: #FFFDFB;      /* Cream White Card Background */
+  --panel-bg: rgba(255, 253, 251, 0.85);
+  --sidebar-bg: linear-gradient(135deg, #FFFDFB 0%, #FFF5F7 100%); /* Bright Cream/Pink Sidebar */
+  --sidebar-text: #4B3B45;
+  --sidebar-icon: #FF7FAF;
+  --sidebar-divider-bg: #FFFDFB;
+  --sidebar-shadow: inset -1px 0 0 rgba(255, 127, 175, 0.15), 4px 0 20px rgba(255, 127, 175, 0.04);
+  --navbar-bg: rgba(255, 253, 251, 0.75);
+  --bg-gradient: radial-gradient(circle at 10% 20%, rgba(255, 244, 246, 0.75) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(253, 249, 248, 0.85) 0%, transparent 50%), #FFFDFB;
+  
+  --gold-inner-border: rgba(201, 160, 106, 0.22);
+  --button-primary-bg: radial-gradient(circle, #FF7FAF 0%, #E05C8F 100%);
+  --button-primary-text: #FFFFFF;
+  --button-glow: 0 4px 14px rgba(255, 127, 175, 0.25);
+  --glow-hover-color: rgba(255, 127, 175, 0.35);
+  --input-bg: rgba(255, 244, 246, 0.65);
+  --input-focus-border: #FF7FAF;
+  --primary-glow: rgba(255, 127, 175, 0.15);
+  --slider-track-bg: rgba(201, 160, 106, 0.2);
+  --divider-color: rgba(201, 160, 106, 0.15);
+
+  --calendar-period-bg: rgba(255, 127, 175, 0.15);
+  --calendar-period-border: rgba(255, 127, 175, 0.35);
+  --calendar-period-text: #E05C8F;
+  
+  --calendar-ovulation-bg: rgba(215, 180, 106, 0.18);
+  --calendar-ovulation-border: rgba(215, 180, 106, 0.35);
+  --calendar-ovulation-text: #C9A06A;
+  
+  --calendar-fertile-bg: rgba(143, 185, 150, 0.15);
+  --calendar-fertile-border: rgba(143, 185, 150, 0.3);
+  --calendar-fertile-text: #8FB996;
+  
+  --calendar-appointment-bg: rgba(182, 154, 203, 0.15);
+  --calendar-appointment-border: rgba(182, 154, 203, 0.3);
+  --calendar-appointment-text: #B69ACB;
+  
+  --calendar-medicine-bg: rgba(182, 154, 203, 0.15);
+  --calendar-medicine-border: rgba(182, 154, 203, 0.3);
+  --calendar-medicine-text: #B69ACB;
+
+  --today-glow: rgba(201, 160, 106, 0.25);
+}
+
+.dark {
+  /* Premium Dark Mode values */
+  --primary: #FF5FA2;      /* Active Rose */
+  --secondary: #2C2023;    /* Deep Muted Rose */
+  --background: #0B0B0F;   /* Antique Dark Prune */
+  --accent: #D98AA8;       
+  --cream: #1A1A23;        /* Dark Charcoal Card */
+  --champagne: #101016;    
+  --rosegold: #E6B8A2;     
+  --vintageText: #CFCFCF;  
+  --darkText: #FFFFFF;     
+  --borderPink: rgba(255, 255, 255, 0.08); 
+  --success: #7ED957;
+  --warning: #FFD166;
+  --error: #FF6B6B;
+  --shadow-soft-glow: 0 8px 30px rgba(255, 95, 162, 0.25);
+  --shadow-luxury: 0 10px 40px -10px rgba(0, 0, 0, 0.55);
+  --shadow-premium: 0 20px 50px -12px rgba(255, 95, 162, 0.15);
+  
+  --card-bg: linear-gradient(135deg, #1A1A23 0%, #222230 100%);
+  --panel-bg: rgba(20, 20, 28, 0.85);
+  --sidebar-bg: linear-gradient(135deg, #2D1A1E 0%, #150A0C 100%); /* Chocolate Brown Leather cover */
+  --sidebar-text: #FFFDF8;
+  --sidebar-icon: #E6B8A2;
+  --sidebar-divider-bg: #2A1810;
+  --sidebar-shadow: inset -5px 0 25px rgba(0,0,0,0.55), 8px 0 30px -5px rgba(0,0,0,0.3);
+  --navbar-bg: #14141C;
+  --bg-gradient: linear-gradient(135deg, #0B0B0F 0%, #151520 100%);
+  
+  --gold-inner-border: rgba(230, 184, 162, 0.25);
+  --button-primary-bg: linear-gradient(135deg, #FF5FA2 0%, #D946EF 100%);
+  --button-primary-text: #FFFFFF;
+  --button-glow: 0 4px 20px rgba(255, 95, 162, 0.35);
+  --glow-hover-color: rgba(255, 95, 162, 0.55);
+  --input-bg: rgba(16, 16, 22, 0.65);
+  --input-focus-border: #FF5FA2;
+  --primary-glow: rgba(255, 95, 162, 0.3);
+  --slider-track-bg: rgba(255, 255, 255, 0.12);
+  --divider-color: rgba(255, 255, 255, 0.08);
+
+  --calendar-period-bg: rgba(255, 95, 162, 0.18);
+  --calendar-period-border: rgba(255, 95, 162, 0.35);
+  --calendar-period-text: #FF5FA2;
+  
+  --calendar-ovulation-bg: rgba(255, 209, 102, 0.18);
+  --calendar-ovulation-border: rgba(255, 209, 102, 0.35);
+  --calendar-ovulation-text: #FFD166;
+  
+  --calendar-fertile-bg: rgba(126, 217, 87, 0.18);
+  --calendar-fertile-border: rgba(126, 217, 87, 0.35);
+  --calendar-fertile-text: #7ED957;
+  
+  --calendar-appointment-bg: rgba(77, 168, 255, 0.18);
+  --calendar-appointment-border: rgba(77, 168, 255, 0.35);
+  --calendar-appointment-text: #4DA8FF;
+  
+  --calendar-medicine-bg: rgba(199, 125, 255, 0.18);
+  --calendar-medicine-border: rgba(199, 125, 255, 0.35);
+  --calendar-medicine-text: #C77DFF;
+
+  --today-glow: rgba(255, 95, 162, 0.35);
+}
+
+/* Pressed flower decoration in bottom corner */
+.glass-card::after {
+  content: "🌸";
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-size: 11px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.glass-card-hover {
+  @apply transition-all duration-300 hover:-translate-y-1.5 hover:shadow-soft-glow;
+}
+
+.glass-panel {
+  background: var(--panel-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--borderPink);
+  transition: background 0.6s ease, border 0.3s ease;
+}
+
+header.glass-panel {
+  background: var(--navbar-bg);
+  border-bottom: 2px solid var(--borderPink);
+}
+
+/* Vintage Paper Texture Overlay */
+.vintage-paper {
+  position: relative;
+}
+
+.vintage-paper::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  opacity: 0.02;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  z-index: 1;
+}
+
+.dark .vintage-paper::before {
+  opacity: 0.008;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--rosegold);
+  border-radius: 3px;
+  opacity: 0.6;
+}
+
+/* Divider Lines */
+.elegant-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--divider-color) 20%, var(--divider-color) 80%, transparent);
+}
+
+/* Wax Seal Buttons */
+button.bg-accent, button[type="submit"] {
+  background: var(--button-primary-bg) !important;
+  color: var(--button-primary-text) !important;
+  border: 1.5px solid var(--rosegold) !important;
+  border-radius: 9999px !important;
+  box-shadow: var(--button-glow), inset 0 0 8px rgba(255,255,255,0.2) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+}
+
+button.bg-accent::before, button[type="submit"]::before {
+  content: "🌸";
+  font-size: 8px;
+  margin-right: 4px;
+}
+
+button.bg-accent:hover, button[type="submit"]:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px var(--glow-hover-color) !important;
+}
+
+/* Forms: Handwritten Stationary Style */
+input[type="text"], input[type="password"], input[type="email"], input[type="date"], input[type="number"], select, textarea {
+  background-color: var(--input-bg) !important;
+  border: 1px solid var(--borderPink) !important;
+  border-bottom: 2px solid var(--rosegold) !important; /* line-rule look */
+  color: var(--darkText) !important;
+  border-radius: 8px !important;
+  padding: 8px 14px !important;
+  transition: all 0.3s ease !important;
+  font-family: var(--font-subtitle) !important;
+  font-size: 15px !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 12px var(--primary-glow) !important;
+}
+
+/* Calendar: Handwritten Notebook Planner Style */
+.calendar-day-period {
+  background-color: var(--calendar-period-bg) !important;
+  border: 1px dashed var(--calendar-period-border) !important;
+  color: var(--calendar-period-text) !important;
+}
+.calendar-day-ovulation {
+  background-color: var(--calendar-ovulation-bg) !important;
+  border: 1px dashed var(--calendar-ovulation-border) !important;
+  color: var(--calendar-ovulation-text) !important;
+}
+.calendar-day-fertile {
+  background-color: var(--calendar-fertile-bg) !important;
+  border: 1px dashed var(--calendar-fertile-border) !important;
+  color: var(--calendar-fertile-text) !important;
+}
+
+/* Today's date slow-rotating floral wreath */
+@keyframes rotate {
+  100% { transform: rotate(360deg); }
+}
+.calendar-day-today {
+  border: none !important;
+  position: relative;
+}
+.calendar-day-today::before {
+  content: "";
+  position: absolute;
+  top: -4px; left: -4px; right: -4px; bottom: -4px;
+  border: 1.5px dashed var(--rosegold);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: rotate 12s linear infinite;
+  box-shadow: 0 0 10px var(--today-glow);
+}
+
+.calendar-day-today::after {
+  content: "🌸";
+  position: absolute;
+  top: -8px;
+  right: -2px;
+  font-size: 7px;
+  pointer-events: none;
+}
+
+/* Recharts customization under dark theme */
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: rgba(255, 255, 255, 0.08) !important;
+}
+.dark .recharts-text {
+  fill: #CFCFCF !important;
+}
+
+/* Soft Shimmer Animation */
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+.shimmer::after {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 253, 251, 0) 0%,
+    rgba(255, 253, 251, 0.2) 20%,
+    rgba(255, 253, 251, 0.3) 60%,
+    rgba(255, 253, 251, 0) 100%
+  );
+  animation: shimmer 2s infinite;
+  content: '';
+}
+
+/* Float Animations for decorations */
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(4deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+.float-element, .animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 8s ease-in-out infinite;
+  animation-delay: 2.5s;
+}
+
+/* Custom range slider stylings */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  background: var(--slider-track-bg);
+  height: 5px;
+  border-radius: 3px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -6px;
+  background-color: var(--rosegold);
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  border: 1px solid var(--cream);
+  box-shadow: 0 2px 6px rgba(75, 59, 69, 0.2);
+}
+input[type="range"]::-moz-range-track {
+  background: var(--slider-track-bg);
+  height: 5px;
+  border-radius: 3px;
+}
+input[type="range"]::-moz-range-thumb {
+  background-color: var(--rosegold);
+  height: 15px;
+  width: 15px;
+  border: 1px solid var(--cream);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(75, 59, 69, 0.2);
+}
+
+/* Today's Mood selection buttons Dark Mode custom style overrides */
+.dark .mood-button {
+  background-color: #FFE3EC !important;
+  border-color: #FFE3EC !important;
+  color: #241A19 !important;
+}
+
+.dark .mood-button:hover {
+  background-color: #FFD5E2 !important;
+  border-color: #FFD5E2 !important;
+}
+
+.dark .mood-button-selected {
+  background-color: #FF8FB8 !important;
+  border-color: #FF8FB8 !important;
+  color: #241A19 !important;
+}
+
