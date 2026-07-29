@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { 
-  Flower, 
-  Mail, 
-  Lock, 
-  User, 
-  ArrowLeft, 
+import {
+  Flower,
+  Mail,
+  Lock,
+  User,
+  ArrowLeft,
   Apple
 } from 'lucide-react';
 
 export const Auth: React.FC = () => {
   const { setIsLoggedIn } = useApp();
   const [authStep, setAuthStep] = useState<'login' | 'signup' | 'forgot' | 'otp' | 'reset'>('login');
-  
+
   // Local state inputs
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -51,7 +51,7 @@ export const Auth: React.FC = () => {
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-background font-body select-none">
-      
+
       {/* Left Column: Elegant Editorial Brand Illustration */}
       <div className="hidden lg:flex lg:col-span-5 relative bg-cream/70 border-r border-borderPink/40 flex-col justify-between p-12 overflow-hidden vintage-paper">
         {/* Floating background blobs */}
@@ -103,10 +103,10 @@ export const Auth: React.FC = () => {
         <div className="absolute bottom-10 left-10 w-60 h-60 rounded-full bg-primary/10 blur-2xl -z-10"></div>
 
         <div className="w-full max-w-md space-y-8 glass-card rounded-premium-lg p-8 sm:p-10 border border-borderPink/60 relative">
-          
+
           {/* Back button for internal screens */}
           {authStep !== 'login' && (
-            <button 
+            <button
               onClick={() => setAuthStep(authStep === 'otp' ? 'login' : 'login')}
               className="absolute top-6 left-6 text-vintageText/60 hover:text-accent flex items-center gap-1 text-xs"
             >
@@ -120,7 +120,7 @@ export const Auth: React.FC = () => {
             <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-accent mx-auto">
               <Flower className="w-4.5 h-4.5 animate-spin" />
             </div>
-            
+
             {authStep === 'login' && (
               <>
                 <h2 className="font-heading text-3xl text-darkText">Welcome Back</h2>
@@ -157,14 +157,14 @@ export const Auth: React.FC = () => {
           {(authStep === 'login' || authStep === 'signup') && (
             <div className="space-y-3.5">
               <div className="grid grid-cols-2 gap-3">
-                <button 
+                <button
                   onClick={() => setIsLoggedIn(true)}
                   className="flex items-center justify-center gap-2 py-2.5 border border-borderPink/60 rounded-full text-xs font-semibold hover:bg-secondary/20 transition-colors"
                 >
                   <Apple className="w-3.5 h-3.5" />
                   <span>Apple</span>
                 </button>
-                <button 
+                <button
                   onClick={() => setIsLoggedIn(true)}
                   className="flex items-center justify-center gap-2 py-2.5 border border-borderPink/60 rounded-full text-xs font-semibold hover:bg-secondary/20 transition-colors"
                 >
@@ -188,19 +188,18 @@ export const Auth: React.FC = () => {
           {/* Form switchers */}
           <form className="space-y-4.5" onSubmit={
             authStep === 'login' ? handleLoginSubmit :
-            authStep === 'signup' ? handleSignupSubmit :
-            authStep === 'forgot' ? handleForgotSubmit :
-            authStep === 'otp' ? handleOtpSubmit :
-            handleResetSubmit
+              authStep === 'signup' ? handleSignupSubmit :
+                authStep === 'forgot' ? handleForgotSubmit :
+                  authStep === 'otp' ? handleOtpSubmit :
+                    handleResetSubmit
           }>
             {authStep === 'signup' && (
               <div className="space-y-1.5">
                 <label className="text-xxs font-bold text-vintageText/60 tracking-wider uppercase font-subtitle"> Sanctuary Name</label>
                 <div className="relative">
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     required
-                    placeholder="Emma Rose" 
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full bg-cream/40 border border-borderPink/60 px-9 py-2.5 rounded-full text-xs font-body"
@@ -214,10 +213,9 @@ export const Auth: React.FC = () => {
               <div className="space-y-1.5">
                 <label className="text-xxs font-bold text-vintageText/60 tracking-wider uppercase font-subtitle font-medium">Email Address</label>
                 <div className="relative">
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     required
-                    placeholder="emma@sanctuary.com" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full bg-cream/40 border border-borderPink/60 px-9 py-2.5 rounded-full text-xs font-body"
@@ -232,7 +230,7 @@ export const Auth: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <label className="text-xxs font-bold text-vintageText/60 tracking-wider uppercase font-subtitle font-medium">Sanctuary Key (Password)</label>
                   {authStep === 'login' && (
-                    <button 
+                    <button
                       type="button"
                       onClick={() => setAuthStep('forgot')}
                       className="text-xxs text-accent hover:underline font-subtitle"
@@ -242,10 +240,9 @@ export const Auth: React.FC = () => {
                   )}
                 </div>
                 <div className="relative">
-                  <input 
-                    type="password" 
+                  <input
+                    type="password"
                     required
-                    placeholder="••••••••" 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full bg-cream/40 border border-borderPink/60 px-9 py-2.5 rounded-full text-xs font-body"
@@ -259,11 +256,11 @@ export const Auth: React.FC = () => {
               <div className="space-y-1.5 text-center">
                 <label className="text-xxs font-bold text-vintageText/60 tracking-wider uppercase font-subtitle">6-Digit Passcode</label>
                 <div className="relative max-w-[200px] mx-auto">
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     required
                     maxLength={6}
-                    placeholder="123456" 
+                    placeholder="123456"
                     value={otpCode}
                     onChange={(e) => setOtpCode(e.target.value)}
                     className="w-full bg-cream/40 border border-borderPink/60 px-4 py-2.5 rounded-full text-center text-sm font-semibold tracking-widest font-body"
@@ -279,10 +276,10 @@ export const Auth: React.FC = () => {
               <div className="space-y-1.5">
                 <label className="text-xxs font-bold text-vintageText/60 tracking-wider uppercase font-subtitle">New Sanctuary Key (Password)</label>
                 <div className="relative">
-                  <input 
-                    type="password" 
+                  <input
+                    type="password"
                     required
-                    placeholder="••••••••" 
+                    placeholder="••••••••"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     className="w-full bg-cream/40 border border-borderPink/60 px-9 py-2.5 rounded-full text-xs font-body"
@@ -292,7 +289,7 @@ export const Auth: React.FC = () => {
               </div>
             )}
 
-            <button 
+            <button
               type="submit"
               className="w-full py-3 rounded-full bg-accent hover:bg-darkText text-white text-xs font-semibold tracking-wider uppercase transition-colors shadow-soft-glow mt-4 flex items-center justify-center gap-2"
             >
@@ -309,7 +306,7 @@ export const Auth: React.FC = () => {
             {authStep === 'login' ? (
               <p className="text-xs text-vintageText/60 font-body">
                 New to the Sanctuary?{' '}
-                <button 
+                <button
                   onClick={() => setAuthStep('signup')}
                   className="text-accent hover:underline font-semibold"
                 >
@@ -319,7 +316,7 @@ export const Auth: React.FC = () => {
             ) : authStep === 'signup' ? (
               <p className="text-xs text-vintageText/60 font-body">
                 Already have a Sanctuary key?{' '}
-                <button 
+                <button
                   onClick={() => setAuthStep('login')}
                   className="text-accent hover:underline font-semibold"
                 >
