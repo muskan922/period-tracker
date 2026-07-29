@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 
 export const Auth: React.FC = () => {
-  const { setIsLoggedIn } = useApp();
+  const { setIsLoggedIn, updateProfile } = useApp();
   const [authStep, setAuthStep] = useState<'login' | 'signup' | 'forgot' | 'otp' | 'reset'>('login');
 
   // Local state inputs
@@ -22,6 +22,11 @@ export const Auth: React.FC = () => {
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (email) {
+      const extractedName = email.split('@')[0];
+      const formattedName = extractedName.charAt(0).toUpperCase() + extractedName.slice(1);
+      updateProfile({ name: formattedName });
+    }
     setIsLoggedIn(true);
   };
 
@@ -40,6 +45,9 @@ export const Auth: React.FC = () => {
     if (authStep === 'otp' && email && !name) {
       setAuthStep('reset'); // coming from forgot password, go to reset password
     } else {
+      if (name) {
+        updateProfile({ name });
+      }
       setIsLoggedIn(true); // coming from signup, log in directly
     }
   };
@@ -279,7 +287,6 @@ export const Auth: React.FC = () => {
                   <input
                     type="password"
                     required
-                    placeholder="••••••••"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     className="w-full bg-cream/40 border border-borderPink/60 px-9 py-2.5 rounded-full text-xs font-body"
