@@ -269,6 +269,9 @@ export const Auth: React.FC = () => {
                     className="w-full bg-cream/40 border border-borderPink/60 px-4 py-2.5 rounded-full text-center text-sm font-semibold tracking-widest font-body"
                   />
                 </div>
+                <p className="text-[10px] text-accent mt-2.5 italic">
+                  ✨ Demo Mode: Enter any 6-digit code (e.g. 123456) to verify.
+                </p>
               </div>
             )}
 
