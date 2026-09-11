@@ -40,7 +40,7 @@
   --rosegold: #C89F65;     /* Antique Gold */
   --vintageText: #4B3B45;  /* Dark Plum Text for readability */
   --darkText: #4B3B45;     /* Heading Text */
-  --borderPink: #E6D5D8;
+  --borderPink: rgba(220, 105, 145, 0.4);
   --success: #8FB996;
   --warning: #F2C57C;
   --error: #E57373;
@@ -315,7 +315,7 @@ aside.glass-panel button:hover:not(.bg-primary\/50) {
   --rosegold: #C9A06A;     /* Rose Gold */
   --vintageText: #4B3B45;  /* Dark Plum Text */
   --darkText: #4B3B45;     
-  --borderPink: rgba(255, 127, 175, 0.15);
+  --borderPink: rgba(220, 105, 145, 0.4);
   --success: #8FB996;
   --warning: #F2C57C;
   --error: #E57373;
@@ -333,7 +333,7 @@ aside.glass-panel button:hover:not(.bg-primary\/50) {
   --navbar-bg: rgba(255, 253, 251, 0.75);
   --bg-gradient: radial-gradient(circle at 10% 20%, rgba(255, 244, 246, 0.75) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(253, 249, 248, 0.85) 0%, transparent 50%), #FFFDFB;
   
-  --gold-inner-border: rgba(201, 160, 106, 0.22);
+  --gold-inner-border: rgba(185, 135, 75, 0.45);
   --button-primary-bg: radial-gradient(circle, #FF7FAF 0%, #E05C8F 100%);
   --button-primary-text: #FFFFFF;
   --button-glow: 0 4px 14px rgba(255, 127, 175, 0.25);
