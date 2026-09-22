@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { apiProfile } from '../services/api';
 import {
   Flower,
   Mail,
@@ -27,11 +28,13 @@ export const Auth: React.FC = () => {
       const formattedName = extractedName.charAt(0).toUpperCase() + extractedName.slice(1);
       updateProfile({ name: formattedName });
     }
+    apiProfile.login(email, password).catch(() => {});
     setIsLoggedIn(true);
   };
 
   const handleSignupSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    apiProfile.signup(name, email, password).catch(() => {});
     setAuthStep('otp'); // proceed to OTP screen
   };
 

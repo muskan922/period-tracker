@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
+import { CustomCalendar } from '../components/CustomCalendar';
 import {
   Droplet,
   Moon,
@@ -8,7 +9,8 @@ import {
   Clock,
   ChevronRight,
   Check,
-  TrendingUp
+  TrendingUp,
+  Calendar
 } from 'lucide-react';
 import {
   AreaChart,
@@ -17,8 +19,14 @@ import {
   Tooltip
 } from 'recharts';
 
-export const Dashboard: React.FC = () => {
+interface DashboardProps {
+  onNavigate?: (tab: string) => void;
+}
+
+export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
   const {
+    profile,
+    cycles,
     moods,
     addMood,
     symptoms,
@@ -31,27 +39,95 @@ export const Dashboard: React.FC = () => {
   const [showWisdomModal, setShowWisdomModal] = React.useState(false);
 
   // Find today's date in YYYY-MM-DD
-  const todayStr = '2026-07-28';
+  const todayStr = new Date().toISOString().split('T')[0];
+  const [selectedDate, setSelectedDate] = React.useState<string>(todayStr);
 
-  // Get current logs
-  const todayMood = moods.find(m => m.date === todayStr);
-  const todaySymptom = symptoms.find(s => s.date === todayStr) || {
-    date: todayStr, cramps: 0, bloating: 0, headache: 0, acne: 0, backPain: 0,
+  // Calculate Current Menstrual Phase based on logged cycles & profile lastPeriodStart
+  const currentPhase = React.useMemo(() => {
+    const targetDate = new Date(selectedDate + 'T00:00:00');
+    
+    let lastStart = profile.lastPeriodStart ? new Date(profile.lastPeriodStart + 'T00:00:00') : new Date('2026-07-05T00:00:00');
+    
+    if (cycles && cycles.length > 0) {
+      const sorted = [...cycles].sort((a, b) => new Date(a.startDate + 'T00:00:00').getTime() - new Date(b.startDate + 'T00:00:00').getTime());
+      const pastCycles = sorted.filter(c => new Date(c.startDate + 'T00:00:00') <= targetDate);
+      if (pastCycles.length > 0) {
+        lastStart = new Date(pastCycles[pastCycles.length - 1].startDate + 'T00:00:00');
+      }
+    }
+
+    const diffMs = targetDate.getTime() - lastStart.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    
+    const cycleLength = profile.cycleLength || 28;
+    const periodLength = profile.periodLength || 5;
+    
+    let cycleDay = 1;
+    if (diffDays >= 0) {
+      cycleDay = (diffDays % cycleLength) + 1;
+    } else {
+      cycleDay = ((diffDays % cycleLength) + cycleLength) % cycleLength + 1;
+    }
+
+    if (cycleDay <= periodLength) {
+      return {
+        name: 'Menstrual Phase',
+        subtitle: 'Rest & Replenish',
+        emoji: '🩸',
+        day: cycleDay,
+        colorClass: 'bg-rose-100/90 text-rose-700 border-rose-300 dark:bg-rose-950/70 dark:text-rose-200 dark:border-rose-800/60',
+        desc: 'Your period is active. Take rest, stay hydrated with warm teas, and practice gentle self-care.'
+      };
+    } else if (cycleDay <= 11) {
+      return {
+        name: 'Follicular Phase',
+        subtitle: 'Energy & Fresh Focus',
+        emoji: '🌱',
+        day: cycleDay,
+        colorClass: 'bg-emerald-100/90 text-emerald-800 border-emerald-300 dark:bg-emerald-950/70 dark:text-emerald-200 dark:border-emerald-800/60',
+        desc: 'Estrogen is steadily rising. Expect boosting energy levels, mental clarity, and creative drive.'
+      };
+    } else if (cycleDay <= 16) {
+      return {
+        name: 'Ovulation Phase',
+        subtitle: 'Peak Radiance & Fertility',
+        emoji: '🌸',
+        day: cycleDay,
+        colorClass: 'bg-amber-100/90 text-amber-800 border-amber-300 dark:bg-amber-950/70 dark:text-amber-200 dark:border-amber-800/60',
+        desc: 'Luteinizing hormone spikes for egg release. Peak fertility, social confidence, and skin glow window.'
+      };
+    } else {
+      return {
+        name: 'Luteal Phase',
+        subtitle: 'Cozy Rest & Progesterone Peak',
+        emoji: '🌙',
+        day: cycleDay,
+        colorClass: 'bg-rose-100/90 text-rose-800 border-rose-300 dark:bg-rose-950/70 dark:text-rose-200 dark:border-rose-800/60',
+        desc: 'Progesterone peaks. You may feel cozy, introverted, or PMS symptoms. Enjoy slow-flow yoga and dark chocolate.'
+      };
+    }
+  }, [selectedDate, profile, cycles]);
+
+  // Get current logs for selected date
+  const todayMood = moods.find(m => m.date === selectedDate);
+  const todaySymptom = symptoms.find(s => s.date === selectedDate) || {
+    date: selectedDate, cramps: 0, bloating: 0, headache: 0, acne: 0, backPain: 0,
     waterIntake: 0, sleepHours: 0, weight: 58.0, exerciseMinutes: 0
   };
 
   // State handlers
   const handleMoodSelect = (moodName: 'Happy' | 'Calm' | 'Sad' | 'Anxious' | 'Angry' | 'Tired') => {
     addMood({
-      date: todayStr,
+      date: selectedDate,
       mood: moodName,
-      note: todayMood?.note || `Felt ${moodName.toLowerCase()} today.`
+      note: todayMood?.note || `Felt ${moodName.toLowerCase()} on ${selectedDate}.`
     });
   };
 
   const handleAddWater = (amount: number) => {
     addSymptomLog({
       ...todaySymptom,
+      date: selectedDate,
       waterIntake: todaySymptom.waterIntake + amount
     });
   };
@@ -59,7 +135,8 @@ export const Dashboard: React.FC = () => {
   const handleUpdateSleep = (hours: number) => {
     addSymptomLog({
       ...todaySymptom,
-      sleepHours: Math.min(24, Math.max(0, todaySymptom.sleepHours + hours))
+      date: selectedDate,
+      sleepHours: hours
     });
   };
 
@@ -85,8 +162,54 @@ export const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6 font-body">
 
+      {/* Date Section Header */}
+      <div className="glass-card rounded-premium-lg p-4 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-cream via-primary/20 to-cream border border-borderPink/60 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-accent text-white shadow-soft-glow">
+            <Calendar className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-accent font-subtitle">Date-wise Overview</span>
+            <h2 className="font-heading text-lg font-bold text-darkText flex items-center gap-2">
+              {new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' })}
+            </h2>
+          </div>
+        </div>
+
+        {/* Active Phase Badge in Header */}
+        <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full border shadow-sm backdrop-blur-md ${currentPhase.colorClass}`}>
+          <span className="text-base">{currentPhase.emoji}</span>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-[10px] font-bold uppercase tracking-wider font-subtitle opacity-80">
+              Active Phase:
+            </span>
+            <span className="font-heading text-xs sm:text-sm font-bold tracking-wide">
+              {currentPhase.name} (Day {currentPhase.day})
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setSelectedDate(todayStr)}
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${selectedDate === todayStr
+              ? 'bg-accent text-white shadow-soft-glow'
+              : 'bg-white/80 text-vintageText hover:bg-white border border-borderPink/50'
+              }`}
+          >
+            Today
+          </button>
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={e => setSelectedDate(e.target.value)}
+            className="px-3 py-1.5 rounded-full text-xs font-semibold bg-white border border-borderPink/60 text-darkText cursor-pointer shadow-sm focus:outline-none focus:ring-2 focus:ring-accent"
+          />
+        </div>
+      </div>
+
       {/* Main Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-2">
 
         {/* Column 1: Cycle Countdown */}
         <div className="md:col-span-4 glass-card rounded-premium-lg p-6 flex flex-col items-center justify-center text-center space-y-4 relative overflow-visible">
@@ -235,12 +358,19 @@ export const Dashboard: React.FC = () => {
           {/* Pink Push-Pin header decoration */}
           <div className="absolute top-2 left-6 text-xl rotate-[-6deg] opacity-90 select-none pointer-events-none">📌</div>
 
-          <div className="flex justify-between items-center pl-4 mt-1">
-            <h3 className="font-heading text-lg font-semibold text-darkText flex items-center gap-2">
+          <div
+            onClick={() => onNavigate?.('water')}
+            className="flex justify-between items-center pl-4 mt-1 cursor-pointer group"
+          >
+            <h3 className="font-heading text-lg font-semibold text-darkText flex items-center gap-2 group-hover:text-sky-600 transition-colors">
               <Droplet className="w-5 h-5 text-sky-400" />
               Water Intake
             </h3>
-            <span className="text-xs font-semibold text-sky-600">{todaySymptom.waterIntake} ml / 2000 ml</span>
+            <span className="text-xs font-semibold text-sky-600">
+              {profile.waterTarget && profile.waterTarget > 0
+                ? `${(todaySymptom.waterIntake / 1000).toFixed(2)} L / ${(profile.waterTarget / 1000).toFixed(1)} L`
+                : 'Set Goal 🎯'}
+            </span>
           </div>
 
           {/* Transparent Vintage Glass Tumbler */}
@@ -257,13 +387,23 @@ export const Dashboard: React.FC = () => {
             </div>
 
             {/* The Vintage Glass Tumbler */}
-            <div className="relative w-24 h-36 border-1 border-white/90 bg-white/5 rounded-b-2xl shadow-luxury overflow-hidden flex flex-col justify-end">
+            <div className="relative w-24 h-36 border border-slate-300/80 dark:border-white/90 bg-slate-100/60 dark:bg-white/5 rounded-b-2xl shadow-luxury overflow-hidden flex flex-col justify-end">
               {/* Highlight glass reflection */}
-              <div className="absolute top-0 left-1 w-1.5 h-full bg-white/20 rounded-full pointer-events-none" />
-              <div className="absolute top-0 right-1.5 w-1 h-full bg-white/10 rounded-full pointer-events-none" />
+              <div className="absolute top-0 left-1 w-1.5 h-full bg-white/30 rounded-full pointer-events-none" />
+              <div className="absolute top-0 right-1.5 w-1 h-full bg-white/20 rounded-full pointer-events-none" />
+
+              {/* Level Percentage Overlay */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none">
+                <span className={`font-heading text-lg font-bold ${todaySymptom.waterIntake === 0 ? 'text-slate-700 dark:text-slate-200' : 'text-slate-800 dark:text-white'} drop-shadow-sm`}>
+                  {Math.round(Math.min(100, (todaySymptom.waterIntake / (profile.waterTarget || 2500)) * 100))}%
+                </span>
+                <span className={`text-[9px] font-semibold ${todaySymptom.waterIntake === 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-700 dark:text-slate-300'}`}>
+                  {todaySymptom.waterIntake === 0 ? 'Empty 🥛' : `${(todaySymptom.waterIntake / 1000).toFixed(1)}L`}
+                </span>
+              </div>
 
               {/* Goal Achieved Butterfly */}
-              {todaySymptom.waterIntake >= 2000 && (
+              {todaySymptom.waterIntake >= (profile.waterTarget || 2500) && (
                 <div className="absolute -top-1 -right-1 z-20 text-sm animate-float pointer-events-none select-none">
                   🦋
                 </div>
@@ -271,7 +411,7 @@ export const Dashboard: React.FC = () => {
 
               {/* Water Level */}
               <div
-                style={{ height: `${Math.min(100, (todaySymptom.waterIntake / 2000) * 100)}%` }}
+                style={{ height: `${Math.min(100, (todaySymptom.waterIntake / (profile.waterTarget || 2500)) * 100)}%` }}
                 className="w-full bg-gradient-to-t from-sky-400/40 to-sky-200/50 relative transition-all duration-1000 border-t border-sky-300/40"
               >
                 {/* Rising Ripples */}
@@ -315,10 +455,10 @@ export const Dashboard: React.FC = () => {
 
           <div className="flex justify-between items-center pl-4 mt-1">
             <h3 className="font-heading text-base font-semibold text-darkText flex items-center gap-2">
-              <Moon className="w-5 h-5 text-purple-400" />
+              <Moon className="w-5 h-5 text-pink-400" />
               Sleep Tracker
             </h3>
-            <span className="text-xs font-semibold text-purple-600">{todaySymptom.sleepHours} hrs</span>
+            <span className="text-xs font-semibold text-pink-600">{todaySymptom.sleepHours} hrs</span>
           </div>
 
           {/* Sleeping Teddy Bear on Cloud Illustration */}
@@ -398,6 +538,22 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* Calendar Section */}
+      <div className="space-y-3 pt-2">
+        <div className="flex items-center justify-between pl-2">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-lg bg-accent/15 text-accent">
+              <Calendar className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-heading text-xl font-bold text-darkText">Cycle & Events Calendar</h3>
+              <p className="text-xs text-vintageText/60 font-subtitle">Interactive calendar view for tracking cycles and events</p>
+            </div>
+          </div>
+        </div>
+        <CustomCalendar />
+      </div>
+
       {/* Dynamic Checklist & Reminders Row */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
 
@@ -418,7 +574,7 @@ export const Dashboard: React.FC = () => {
                 <div
                   key={m.id}
                   className={`flex items-center justify-between p-3 rounded-premium-md border transition-all duration-300 ${isTaken
-                    ? 'bg-purple-50/30 border-purple-300/50 opacity-80'
+                    ? 'bg-rose-50/40 border-rose-300/50 opacity-80'
                     : 'bg-[#FFFDF8]-50/30 border-borderPink opacity-80'
                     }`}
                 >
@@ -426,7 +582,7 @@ export const Dashboard: React.FC = () => {
                     <button
                       onClick={() => toggleMedication(m.id, todayStr)}
                       className={`w-5 h-5 rounded-full flex items-center justify-center border transition-all duration-300 ${isTaken
-                        ? 'bg-purple-400 border-purple-500 text-white shadow-soft-glow'
+                        ? 'bg-rose-400 border-rose-500 text-white shadow-soft-glow'
                         : 'border-borderPink hover:border-accent hover:bg-cream bg-white'
                         }`}
                     >
@@ -447,7 +603,7 @@ export const Dashboard: React.FC = () => {
                     </div>
                   )}
 
-                  <span className={`text-[13px] font-medium font-subtitle px-2 py-0.5 rounded-full ${isTaken ? 'bg-purple-100 text-purple-700' : 'bg-cream border border-borderPink text-vintageText/60'
+                  <span className={`text-[13px] font-medium font-subtitle px-2 py-0.5 rounded-full ${isTaken ? 'bg-rose-100 text-rose-700' : 'bg-cream border border-borderPink text-vintageText/60'
                     }`}>
                     {isTaken ? 'Taken' : 'Pending'}
                   </span>

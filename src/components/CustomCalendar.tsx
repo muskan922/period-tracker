@@ -4,7 +4,7 @@ import { useApp } from '../context/AppContext';
 
 export const CustomCalendar: React.FC = () => {
   const { cycles, appointments, medications, moods } = useApp();
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 6, 28)); // July 28, 2026
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -95,7 +95,7 @@ export const CustomCalendar: React.FC = () => {
     // (Emma's last period started July 5, duration 5 days. Next starts Aug 2. Fertile window is Jul 15-21 approx, ovulation Jul 19)
     // Predictions for August: Next period Aug 2 - Aug 6, Fertile window Aug 12 - 18, Ovulation Aug 16
     const curDateObj = new Date(dateStr);
-    
+
     // Predicted August Period
     const augPeriodStart = new Date(2026, 7, 2);
     const augPeriodEnd = new Date(2026, 7, 6);
@@ -149,7 +149,7 @@ export const CustomCalendar: React.FC = () => {
   };
 
   // Selected Day Details Modal/Card
-  const [selectedDay, setSelectedDay] = useState<number | null>(28);
+  const [selectedDay, setSelectedDay] = useState<number | null>(new Date().getDate());
   const selectedDateStr = selectedDay ? formatDateString(selectedDay) : '';
   const selectedStatus = selectedDay ? checkDayStatus(selectedDay) : null;
 
@@ -169,13 +169,13 @@ export const CustomCalendar: React.FC = () => {
             <p className="font-subtitle text-sm text-accent italic">{year}</p>
           </div>
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={prevMonth}
               className="w-10 h-10 rounded-full flex items-center justify-center bg-cream border border-borderPink/60 text-vintageText hover:bg-secondary/40 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <button 
+            <button
               onClick={nextMonth}
               className="w-10 h-10 rounded-full flex items-center justify-center bg-cream border border-borderPink/60 text-vintageText hover:bg-secondary/40 transition-colors"
             >
@@ -202,7 +202,8 @@ export const CustomCalendar: React.FC = () => {
 
             const status = checkDayStatus(day);
             const isSelected = selectedDay === day;
-            const isToday = day === 28 && month === 6 && year === 2026;
+            const now = new Date();
+            const isToday = day === now.getDate() && month === now.getMonth() && year === now.getFullYear();
 
             // Compute background color based on cycle/fertility state
             let cellBg = 'bg-transparent';

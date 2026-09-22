@@ -5,6 +5,7 @@ import { LandingPage } from './pages/LandingPage';
 import { Auth } from './pages/Auth';
 import { Dashboard } from './pages/Dashboard';
 import { PeriodTracker } from './pages/PeriodTracker';
+import { WaterTracker } from './pages/WaterTracker';
 import { CustomCalendar } from './components/CustomCalendar';
 import { AIPredictions } from './pages/AIPredictions';
 import { MoodTracker } from './pages/MoodTracker';
@@ -30,8 +31,9 @@ const AppContent: React.FC = () => {
 
   return (
     <Layout currentTab={currentTab} setCurrentTab={setCurrentTab}>
-      {currentTab === 'dashboard' && <Dashboard />}
+      {currentTab === 'dashboard' && <Dashboard onNavigate={(tab) => setCurrentTab(tab)} />}
       {currentTab === 'tracker' && <PeriodTracker />}
+      {currentTab === 'water' && <WaterTracker />}
       {currentTab === 'calendar' && <CustomCalendar />}
       {currentTab === 'predictions' && <AIPredictions />}
       {currentTab === 'mood' && <MoodTracker />}

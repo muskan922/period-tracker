@@ -12,7 +12,8 @@ import {
   Settings,
   User,
   LogOut,
-  Flower
+  Flower,
+  Droplet
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -27,11 +28,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, setCurrentTab }) =
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, color: 'text-rose-400' },
     { id: 'tracker', label: 'Period Tracker', icon: Heart, color: 'text-pink-400' },
+    { id: 'water', label: 'Water Tracker ', icon: Droplet, color: 'text-sky-400' },
     { id: 'calendar', label: 'Luxury Calendar', icon: Calendar, color: 'text-amber-400' },
-    { id: 'predictions', label: 'AI Predictions', icon: Sparkles, color: 'text-purple-400' },
+    { id: 'predictions', label: 'AI Predictions', icon: Sparkles, color: 'text-pink-400' },
     { id: 'mood', label: 'Mood Journal', icon: Smile, color: 'text-teal-400' },
-    { id: 'symptoms', label: 'Symptom Logger', icon: Flower, color: 'text-indigo-400' },
-    { id: 'medication', label: 'Pill Reminders', icon: Pill, color: 'text-violet-400' },
+    { id: 'symptoms', label: 'Symptom Logger', icon: Flower, color: 'text-rose-400' },
+    { id: 'medication', label: 'Pill Reminders', icon: Pill, color: 'text-pink-500' },
     { id: 'appointments', label: 'Consultations', icon: CalendarDays, color: 'text-sky-400' },
     { id: 'community', label: 'Sister Circle', icon: Users, color: 'text-emerald-400' },
     { id: 'reports', label: 'Wellness Reports', icon: FileText, color: 'text-rose-400' },
@@ -43,7 +45,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, setCurrentTab }) =
   ];
 
   return (
-    <aside className="w-72 h-screen flex flex-col glass-panel border-r border-borderPink/60 shrink-0 sticky top-0 z-20">
+    <aside className="w-72 h-screen flex flex-col glass-panel border-r border-borderPink/60 shrink-0 sticky top-0 z-20 overflow-y-auto scrollbar-thin">
       {/* Brand Logo */}
       <div className="p-8 pb-4 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-accent shadow-soft-glow float-element">

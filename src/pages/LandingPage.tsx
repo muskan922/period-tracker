@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Sparkles, 
   Heart, 
@@ -8,7 +8,9 @@ import {
   ArrowRight, 
   Flower, 
   Pill,
-  Activity
+  Activity,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 interface LandingPageProps {
@@ -17,6 +19,29 @@ interface LandingPageProps {
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    return document.documentElement.classList.contains('dark') || localStorage.getItem('flora-theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
+
+  const toggleTheme = () => {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
+    if (nextDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('flora-theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('flora-theme', 'vintage');
+    }
+  };
 
   const features = [
     { title: 'AI Prediction', desc: 'Predict period dates, fertile windows, and hormonal swings with 98% confidence.', icon: Sparkles },
@@ -39,7 +64,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
   ];
 
   return (
-    <div className="bg-background text-vintageText min-h-screen relative overflow-hidden font-body selection:bg-primary selection:text-darkText">
+    <div className="bg-background text-vintageText min-h-screen relative overflow-hidden font-body selection:bg-primary selection:text-darkText transition-colors duration-300">
       {/* Editorial Decorative Backgrounds */}
       <div className="absolute top-0 right-0 w-[50%] h-[700px] bg-primary/20 rounded-bl-[150px] -z-10"></div>
       <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-secondary/30 blur-3xl -z-10"></div>
@@ -56,7 +81,26 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
             <span className="font-subtitle text-xs text-accent italic block -mt-1">AI Wellness</span>
           </div>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 sm:gap-6">
+          <button 
+            onClick={toggleTheme}
+            className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-rose-300/40 dark:border-rose-900/40 shadow-soft-glow hover:shadow-luxury hover:scale-105 transition-all duration-300 group cursor-pointer"
+            title={isDark ? "Switch to Vintage Sanctuary" : "Switch to Midnight Sanctuary"}
+            aria-label="Toggle theme mode"
+          >
+            <div className="relative w-9 h-5 rounded-full bg-gradient-to-r from-rose-200 via-pink-300 to-amber-200 dark:from-indigo-950 dark:via-purple-900 dark:to-slate-900 p-0.5 transition-all duration-500 shadow-inner flex items-center">
+              <div 
+                className={`w-4 h-4 rounded-full bg-white dark:bg-amber-300 shadow-sm transform transition-transform duration-500 flex items-center justify-center text-[9px] ${
+                  isDark ? 'translate-x-4 text-slate-900' : 'translate-x-0 text-rose-500'
+                }`}
+              >
+                {isDark ? '🌙' : '✨'}
+              </div>
+            </div>
+            <span className="text-[11px] font-subtitle font-bold tracking-wider uppercase text-vintageText dark:text-rose-200 group-hover:text-accent transition-colors">
+              {isDark ? 'Midnight' : 'Vintage'}
+            </span>
+          </button>
           <button 
             onClick={onStart}
             className="text-xs font-semibold hover:text-accent transition-colors"

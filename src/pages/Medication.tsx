@@ -150,7 +150,7 @@ export const MedicationPage: React.FC = () => {
               key={m.id} 
               className={`glass-card rounded-premium-lg p-6 flex flex-col justify-between space-y-4 border transition-all duration-300 ${
                 isTakenToday 
-                  ? 'bg-purple-50/10 border-purple-200/40 opacity-85' 
+                  ? 'bg-rose-50/10 border-rose-200/40 opacity-85' 
                   : 'bg-cream/40 border-borderPink/45 hover:shadow-soft-glow'
               }`}
             >
@@ -162,7 +162,7 @@ export const MedicationPage: React.FC = () => {
                   onClick={() => toggleMedication(m.id, todayStr)}
                   className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-300 ${
                     isTakenToday 
-                      ? 'bg-purple-400 border-purple-500 text-white shadow-soft-glow' 
+                      ? 'bg-rose-400 border-rose-500 text-white shadow-soft-glow' 
                       : 'border-borderPink/60 text-vintageText/60 hover:bg-cream bg-white'
                   }`}
                 >
@@ -185,8 +185,8 @@ export const MedicationPage: React.FC = () => {
                   Take at {m.time}
                 </span>
                 {m.notifications ? (
-                  <span className="flex items-center gap-1 text-purple-500 font-semibold">
-                    <Bell className="w-3 h-3 text-purple-400 animate-bounce" />
+                  <span className="flex items-center gap-1 text-rose-500 font-semibold">
+                    <Bell className="w-3 h-3 text-rose-400 animate-bounce" />
                     Alert active
                   </span>
                 ) : (

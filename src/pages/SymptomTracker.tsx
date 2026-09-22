@@ -123,9 +123,14 @@ export const SymptomTracker: React.FC = () => {
 
               {/* Water */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-vintageText/60 tracking-wider uppercase font-subtitle flex items-center gap-1">
-                  <Droplet className="w-3.5 h-3.5 text-sky-400" />
-                  Water (ml)
+                <label className="text-[10px] font-bold text-vintageText/60 tracking-wider uppercase font-subtitle flex items-center justify-between">
+                  <span className="flex items-center gap-1">
+                    <Droplet className="w-3.5 h-3.5 text-sky-400" />
+                    Water (ml)
+                  </span>
+                  <span className="text-sky-600 font-semibold text-[11px]">
+                    {(water / 1000).toFixed(2)} Liters
+                  </span>
                 </label>
                 <input 
                   type="number" 
@@ -154,7 +159,7 @@ export const SymptomTracker: React.FC = () => {
               {/* Sleep */}
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-vintageText/60 tracking-wider uppercase font-subtitle flex items-center gap-1">
-                  <Moon className="w-3.5 h-3.5 text-purple-400" />
+                  <Moon className="w-3.5 h-3.5 text-pink-400" />
                   Sleep (hrs)
                 </label>
                 <input 

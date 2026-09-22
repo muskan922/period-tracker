@@ -40,6 +40,16 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentTab, setCurrent
 
   const currentCycleDay = getCycleDay();
 
+  const getCyclePhase = () => {
+    const periodLen = profile.periodLength || 5;
+    if (currentCycleDay <= periodLen) return { name: 'Menstrual Phase', emoji: '🩸' };
+    if (currentCycleDay <= 11) return { name: 'Follicular Phase', emoji: '🌱' };
+    if (currentCycleDay <= 16) return { name: 'Ovulation Phase', emoji: '🌸' };
+    return { name: 'Luteal Phase', emoji: '🌙' };
+  };
+
+  const currentPhase = getCyclePhase();
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
@@ -62,7 +72,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentTab, setCurrent
   // (Removed getTabQuote since greetings are now static quotes)
 
   return (
-    <div className="flex min-h-screen vintage-paper overflow-hidden text-vintageText select-none">
+    <div className="flex min-h-screen vintage-paper text-vintageText select-none">
       {/* Botanical Decorative Overlays */}
       <div className="fixed -top-16 -right-16 w-96 h-96 rounded-full bg-rose-100/10 blur-3xl pointer-events-none z-0"></div>
       <div className="fixed -bottom-32 -left-32 w-120 h-120 rounded-full bg-pink-100/20 blur-3xl pointer-events-none z-0"></div>
@@ -76,13 +86,13 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentTab, setCurrent
       </div>
 
       {/* Sidebar - Desktop */}
-      <div className="hidden lg:block">
+      <div className="hidden md:block">
         <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} />
       </div>
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
+        <div className="fixed inset-0 z-50 flex md:hidden">
           <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
           <div className="relative w-72 h-full flex flex-col bg-background animate-slide-in shadow-2xl">
             <button
@@ -100,7 +110,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentTab, setCurrent
       )}
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 z-10 relative h-screen overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 z-10 relative h-screen overflow-hidden">
         {/* Hanging Victorian Lantern next to sidebar */}
         <div className="absolute left-1 top-4 z-30 pointer-events-none hidden lg:block select-none animate-float">
           <div className="flex flex-col items-center">
@@ -141,7 +151,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentTab, setCurrent
           {/* Mobile Menu Trigger */}
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="lg:hidden p-2 rounded-premium-md hover:bg-secondary/40 text-vintageText"
+            className="md:hidden p-2 rounded-premium-md hover:bg-secondary/40 text-vintageText"
           >
             <Menu className="w-5 h-5" />
           </button>
@@ -218,11 +228,11 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentTab, setCurrent
                             }`}
                         >
                           <div className="flex items-center gap-1.5 mb-1">
-                            {n.type === 'ai' && <Sparkles className="w-3 h-3 text-purple-400" />}
+                            {n.type === 'ai' && <Sparkles className="w-3 h-3 text-pink-400" />}
                             {n.type === 'app' && <CalendarDays className="w-3 h-3 text-sky-400" />}
                             {n.type === 'med' && <span className="text-xs text-rose-400">💊</span>}
                             <span className="font-semibold text-darkText capitalize">{n.type} Insight</span>
-                            <span className="ml-auto text-[10px] text-vintageText/55">{n.time}</span>
+                            <span className="ml-auto text-[10px] font-semibold text-accent px-2 py-0.5 rounded-full bg-accent/15 border border-accent/25">{n.time || currentPhase.name}</span>
                           </div>
                           <p className="text-vintageText/80 font-body">{n.text}</p>
                         </div>
@@ -271,13 +281,13 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentTab, setCurrent
               className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent/15 border border-accent/25 hover:bg-accent/25 text-vintageText text-xs font-semibold font-body transition-colors"
             >
               <CalendarDays className="w-3.5 h-3.5 text-accent" />
-              <span className="hidden sm:inline">Cycle Day {currentCycleDay}</span>
+              <span className="hidden sm:inline">{currentPhase.emoji} {currentPhase.name} (Day {currentCycleDay})</span>
             </button>
           </div>
         </header>
 
         {/* Dynamic page mount wrapper */}
-        <main className="flex-1 p-6 lg:p-8 overflow-y-auto relative">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 pb-16 overflow-y-auto relative">
           <div className="max-w-6xl mx-auto">
             {children}
           </div>

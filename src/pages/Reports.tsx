@@ -111,7 +111,9 @@ export const Reports: React.FC = () => {
             </div>
             <div className="bg-cream/45 border border-borderPink/30 p-4 rounded-premium-md text-center">
               <span className="text-[10px] font-bold text-accent tracking-widest uppercase font-subtitle">Water Averages</span>
-              <p className="font-heading text-3.5xl text-darkText font-medium mt-1">{avgWater} <span className="text-xs">ml</span></p>
+              <p className="font-heading text-3.5xl text-darkText font-medium mt-1">
+                {(avgWater / 1000).toFixed(1)} <span className="text-xs">Liters ({avgWater} ml)</span>
+              </p>
             </div>
           </div>
         </div>

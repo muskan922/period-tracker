@@ -1,4 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import {
+  apiProfile,
+  apiCycles,
+  apiMoods,
+  apiSymptoms,
+  apiMedications,
+  apiAppointments,
+  apiCommunity
+} from '../services/api';
 
 // Types
 export interface UserProfile {
@@ -13,6 +22,7 @@ export interface UserProfile {
   connectedDevices: string[];
   notificationsEnabled: boolean;
   theme: 'vintage' | 'dark' | 'journal';
+  waterTarget?: number;
 }
 
 export interface CycleLog {
@@ -88,6 +98,8 @@ interface AppContextType {
   addMood: (mood: MoodLog) => void;
   symptoms: DailySymptomLog[];
   addSymptomLog: (symptom: DailySymptomLog) => void;
+  updateWaterIntake: (date: string, amountMl: number) => void;
+  setWaterTarget: (targetMl: number) => void;
   medications: Medication[];
   toggleMedication: (id: string, date: string) => void;
   addMedication: (med: Omit<Medication, 'id' | 'completedDates'>) => void;
@@ -109,6 +121,16 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
+  // Get initial target from localStorage (0 if not set by user)
+  const getInitialWaterTarget = () => {
+    try {
+      const saved = localStorage.getItem('flora-water-target');
+      return saved ? Number(saved) : 0;
+    } catch {
+      return 0;
+    }
+  };
+
   // Initial Mock Profile
   const [profile, setProfile] = useState<UserProfile>({
     name: 'Emma Rose',
@@ -125,10 +147,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     ],
     connectedDevices: ['Apple Watch', 'Apple Health'],
     notificationsEnabled: true,
-    theme: 'vintage'
+    theme: 'vintage',
+    waterTarget: getInitialWaterTarget()
   });
 
-  // Load and apply initial theme preference from storage or preference
+  // Load and apply initial theme & water target preference from storage
   useEffect(() => {
     const savedTheme = localStorage.getItem('flora-theme');
     let activeTheme = savedTheme;
@@ -137,7 +160,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       activeTheme = prefersDark ? 'dark' : 'vintage';
     }
     
-    setProfile(prev => ({ ...prev, theme: activeTheme as any }));
+    const savedWaterTarget = localStorage.getItem('flora-water-target');
+    const targetVal = savedWaterTarget ? Number(savedWaterTarget) : profile.waterTarget || 0;
+
+    setProfile(prev => ({
+      ...prev,
+      theme: activeTheme as any,
+      waterTarget: targetVal
+    }));
 
     if (activeTheme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -172,13 +202,35 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     { date: '2026-07-28', mood: 'Calm', note: 'Feeling grounded. Preparing for my upcoming cycle next week.' }
   ]);
 
-  // Daily Vitals & Symptoms log
-  const [symptoms, setSymptoms] = useState<DailySymptomLog[]>([
-    { date: '2026-07-25', cramps: 0, bloating: 1, headache: 0, acne: 2, backPain: 0, waterIntake: 1500, sleepHours: 7.5, weight: 58.2, exerciseMinutes: 30 },
-    { date: '2026-07-26', cramps: 1, bloating: 2, headache: 2, acne: 1, backPain: 1, waterIntake: 1200, sleepHours: 6.0, weight: 58.4, exerciseMinutes: 15 },
-    { date: '2026-07-27', cramps: 0, bloating: 0, headache: 0, acne: 1, backPain: 0, waterIntake: 2000, sleepHours: 8.2, weight: 58.1, exerciseMinutes: 45 },
-    { date: '2026-07-28', cramps: 1, bloating: 1, headache: 1, acne: 0, backPain: 2, waterIntake: 1750, sleepHours: 7.8, weight: 58.0, exerciseMinutes: 20 }
-  ]);
+  // Generate 30 days of past logs for complete 1-month status
+  const generateInitial30DaysLogs = (): DailySymptomLog[] => {
+    const logs: DailySymptomLog[] = [];
+    const today = new Date();
+    const waterPattern = [2500, 2000, 1500, 2750, 3000, 1800, 2250, 2500, 1200, 2600, 2400, 2100, 1900, 2800, 2500, 1600, 2300, 2700, 2000, 2500, 2200, 1800, 3100, 2500, 2400, 2000, 1500, 2700, 2500, 2300];
+    
+    for (let i = 0; i < 30; i++) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split('T')[0];
+      const water = waterPattern[i % waterPattern.length];
+      logs.push({
+        date: dateStr,
+        cramps: i % 7 === 0 ? 2 : 0,
+        bloating: i % 5 === 0 ? 1 : 0,
+        headache: i % 6 === 0 ? 1 : 0,
+        acne: i % 4 === 0 ? 1 : 0,
+        backPain: i % 8 === 0 ? 1 : 0,
+        waterIntake: water,
+        sleepHours: 7 + (i % 3) * 0.5,
+        weight: 58.0 + (i % 5) * 0.1,
+        exerciseMinutes: (i % 4) * 15 + 15
+      });
+    }
+    return logs;
+  };
+
+  // Daily Vitals & Symptoms log (1 Month / 30 Days)
+  const [symptoms, setSymptoms] = useState<DailySymptomLog[]>(generateInitial30DaysLogs());
 
   // Medications
   const [medications, setMedications] = useState<Medication[]>([
@@ -243,14 +295,43 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Notifications
   const [notifications, setNotifications] = useState([
-    { id: 'n1', text: 'AI Forecast: Your fertile window starts tomorrow. Stay hydrated 🌸', time: '10 min ago', type: 'ai', read: false },
-    { id: 'n2', text: 'Reminder: Take Iron & Folic Acid pill at 08:30 AM.', time: '4 hours ago', type: 'med', read: false },
-    { id: 'n3', text: 'Dr. Evelyn Fontaine confirmed your appointment on Aug 3.', time: '1 day ago', type: 'app', read: true }
+    { id: 'n1', text: 'AI Forecast: Your fertile window starts tomorrow. Stay hydrated 🌸', time: 'Luteal Phase', type: 'ai', read: false },
+    { id: 'n2', text: 'Reminder: Take Iron & Folic Acid pill at 08:30 AM.', time: 'Luteal Phase', type: 'med', read: false },
+    { id: 'n3', text: 'Dr. Evelyn Fontaine confirmed your appointment on Aug 3.', time: 'Follicular Phase', type: 'app', read: true }
   ]);
+
+  // Fetch Initial Data from Express + PostgreSQL Backend on Mount
+  useEffect(() => {
+    async function loadBackendData() {
+      try {
+        const [prof, fetchedCycles, fetchedMoods, fetchedSymptoms, fetchedMeds, fetchedApps, fetchedPosts] = await Promise.all([
+          apiProfile.get().catch(() => null),
+          apiCycles.getAll().catch(() => null),
+          apiMoods.getAll().catch(() => null),
+          apiSymptoms.getAll().catch(() => null),
+          apiMedications.getAll().catch(() => null),
+          apiAppointments.getAll().catch(() => null),
+          apiCommunity.getAll().catch(() => null),
+        ]);
+
+        if (prof) setProfile(prev => ({ ...prev, ...prof }));
+        if (fetchedCycles && fetchedCycles.length > 0) setCycles(fetchedCycles);
+        if (fetchedMoods && fetchedMoods.length > 0) setMoods(fetchedMoods);
+        if (fetchedSymptoms && fetchedSymptoms.length > 0) setSymptoms(fetchedSymptoms);
+        if (fetchedMeds && fetchedMeds.length > 0) setMedications(fetchedMeds);
+        if (fetchedApps && fetchedApps.length > 0) setAppointments(fetchedApps);
+        if (fetchedPosts && fetchedPosts.length > 0) setPosts(fetchedPosts);
+      } catch (e) {
+        console.log('Running in client offline mode, backend API not connected yet.');
+      }
+    }
+    loadBackendData();
+  }, []);
 
   // Actions
   const updateProfile = (fields: Partial<UserProfile>) => {
     setProfile(prev => ({ ...prev, ...fields }));
+    apiProfile.update(fields).catch(() => {});
   };
 
   const addCycle = (cycle: Omit<CycleLog, 'id'>) => {
@@ -259,14 +340,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       ...cycle
     };
     setCycles(prev => [newCycle, ...prev]);
-    // update profile last period start if new cycle is most recent
     if (cycles.length === 0 || new Date(cycle.startDate) > new Date(profile.lastPeriodStart)) {
       setProfile(prev => ({ ...prev, lastPeriodStart: cycle.startDate }));
     }
+    apiCycles.add(cycle).then(res => {
+      setCycles(prev => prev.map(c => c.id === newCycle.id ? res : c));
+    }).catch(() => {});
   };
 
   const deleteCycle = (id: string) => {
     setCycles(prev => prev.filter(c => c.id !== id));
+    apiCycles.delete(id).catch(() => {});
   };
 
   const addMood = (mood: MoodLog) => {
@@ -274,6 +358,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const filtered = prev.filter(m => m.date !== mood.date);
       return [mood, ...filtered];
     });
+    apiMoods.add(mood).catch(() => {});
   };
 
   const addSymptomLog = (symptom: DailySymptomLog) => {
@@ -281,6 +366,41 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const filtered = prev.filter(s => s.date !== symptom.date);
       return [symptom, ...filtered];
     });
+    apiSymptoms.add(symptom).catch(() => {});
+  };
+
+  const updateWaterIntake = (date: string, amountMl: number) => {
+    setSymptoms(prev => {
+      const existingIndex = prev.findIndex(s => s.date === date);
+      if (existingIndex >= 0) {
+        const updated = [...prev];
+        updated[existingIndex] = {
+          ...updated[existingIndex],
+          waterIntake: Math.max(0, amountMl)
+        };
+        return updated;
+      } else {
+        const newLog: DailySymptomLog = {
+          date,
+          cramps: 0,
+          bloating: 0,
+          headache: 0,
+          acne: 0,
+          backPain: 0,
+          waterIntake: Math.max(0, amountMl),
+          sleepHours: 7,
+          weight: 58.0,
+          exerciseMinutes: 0
+        };
+        return [newLog, ...prev];
+      }
+    });
+    apiSymptoms.updateWater(date, amountMl).catch(() => {});
+  };
+
+  const setWaterTarget = (targetMl: number) => {
+    localStorage.setItem('flora-water-target', targetMl.toString());
+    updateProfile({ waterTarget: targetMl });
   };
 
   const toggleMedication = (id: string, date: string) => {
@@ -293,6 +413,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       return med;
     }));
+    apiMedications.toggle(id, date).catch(() => {});
   };
 
   const addMedication = (med: Omit<Medication, 'id' | 'completedDates'>) => {
@@ -302,6 +423,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       ...med
     };
     setMedications(prev => [...prev, newMed]);
+    apiMedications.add(med).then(res => {
+      setMedications(prev => prev.map(m => m.id === newMed.id ? res : m));
+    }).catch(() => {});
   };
 
   const addAppointment = (app: Omit<Appointment, 'id' | 'synced'>) => {
@@ -311,6 +435,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       ...app
     };
     setAppointments(prev => [...prev, newApp]);
+    apiAppointments.add(app).then(res => {
+      setAppointments(prev => prev.map(a => a.id === newApp.id ? res : a));
+    }).catch(() => {});
   };
 
   const likePost = (id: string) => {
@@ -324,6 +451,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       return post;
     }));
+    apiCommunity.like(id).catch(() => {});
   };
 
   const savePost = (id: string) => {
@@ -333,6 +461,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       return post;
     }));
+    apiCommunity.save(id).catch(() => {});
   };
 
   const addComment = (postId: string, commentContent: string) => {
@@ -349,6 +478,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       return post;
     }));
+    apiCommunity.addComment(postId, commentContent).catch(() => {});
   };
 
   const createPost = (title: string, content: string, tags: string[]) => {
@@ -366,6 +496,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       time: 'Just now'
     };
     setPosts(prev => [newPost, ...prev]);
+    apiCommunity.create(title, content, tags).then(res => {
+      setPosts(prev => prev.map(p => p.id === newPost.id ? res : p));
+    }).catch(() => {});
   };
 
   const markNotificationsRead = () => {
@@ -383,6 +516,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addMood,
       symptoms,
       addSymptomLog,
+      updateWaterIntake,
+      setWaterTarget,
       medications,
       toggleMedication,
       addMedication,
