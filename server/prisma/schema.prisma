@@ -1,0 +1,176 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id               Int            @id @default(autoincrement())
+  name             String         @default("Emma Rose")
+  email            String         @unique @default("emma@flora.com")
+  passwordHash     String         @default("$2a$10$abcdefghijklmnopqrstuv") @map("password_hash")
+  avatar           String         @default("https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200")
+  age              Int            @default(26)
+  cycleLength      Int            @default(28) @map("cycle_length")
+  periodLength     Int            @default(5) @map("period_length")
+  lastPeriodStart  DateTime?      @default(now()) @map("last_period_start")
+  theme            String         @default("vintage")
+  waterTarget      Int            @default(2500) @map("water_target")
+  createdAt        DateTime       @default(now()) @map("created_at")
+
+  cycleLogs        CycleLog[]
+  moodLogs         MoodLog[]
+  symptomLogs      SymptomLog[]
+  medications      Medication[]
+  appointments     Appointment[]
+  communityPosts   CommunityPost[]
+  notifications    Notification[]
+
+  @@map("users")
+}
+
+model CycleLog {
+  id        String   @id @default(cuid())
+  userId    Int      @default(1) @map("user_id")
+  startDate DateTime @map("start_date")
+  endDate   DateTime @map("end_date")
+  flow      String   // 'Light', 'Medium', 'Heavy'
+  pain      Int      @default(1)
+  symptoms  String[] @default([])
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("cycle_logs")
+}
+
+model MoodLog {
+  id       Int      @id @default(autoincrement())
+  userId   Int      @default(1) @map("user_id")
+  logDate  DateTime @map("log_date")
+  mood     String   // 'Happy', 'Calm', 'Sad', 'Anxious', 'Angry', 'Tired'
+  note     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, logDate])
+  @@map("mood_logs")
+}
+
+model SymptomLog {
+  id              Int      @id @default(autoincrement())
+  userId          Int      @default(1) @map("user_id")
+  logDate         DateTime @map("log_date")
+  cramps          Int      @default(0)
+  bloating        Int      @default(0)
+  headache        Int      @default(0)
+  acne            Int      @default(0)
+  backPain        Int      @default(0) @map("back_pain")
+  waterIntake     Int      @default(0) @map("water_intake")
+  sleepHours      Float    @default(7.0) @map("sleep_hours")
+  weight          Float    @default(58.0)
+  exerciseMinutes Int      @default(0) @map("exercise_minutes")
+  energy          Int?     @default(7)
+  libido          Int?     @default(3)
+  journal         String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, logDate])
+  @@map("symptom_logs")
+}
+
+model Medication {
+  id             String   @id @default(cuid())
+  userId         Int      @default(1) @map("user_id")
+  name           String
+  dosage         String
+  time           String
+  repeatSchedule String   @default("Daily") @map("repeat_schedule")
+  notifications  Boolean  @default(true)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  completions MedicationCompletion[]
+
+  @@map("medications")
+}
+
+model MedicationCompletion {
+  id            Int        @id @default(autoincrement())
+  medicationId  String     @map("medication_id")
+  completedDate DateTime   @map("completed_date")
+
+  medication Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+
+  @@unique([medicationId, completedDate])
+  @@map("medication_completions")
+}
+
+model Appointment {
+  id              String   @id @default(cuid())
+  userId          Int      @default(1) @map("user_id")
+  doctorName      String   @map("doctor_name")
+  specialty       String
+  appointmentDate DateTime @map("appointment_date")
+  appointmentTime String   @map("appointment_time")
+  notes           String?
+  synced          Boolean  @default(true)
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("appointments")
+}
+
+model CommunityPost {
+  id        String   @id @default(cuid())
+  userId    Int      @default(1) @map("user_id")
+  author    String
+  avatar    String   @default("🌸")
+  title     String
+  content   String
+  tags      String[] @default([])
+  likes     Int      @default(0)
+  liked     Boolean  @default(false)
+  saved     Boolean  @default(false)
+  timeAgo   String   @default("Just now") @map("time_ago")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments PostComment[]
+
+  @@map("community_posts")
+}
+
+model PostComment {
+  id        String   @id @default(cuid())
+  postId    String   @map("post_id")
+  author    String
+  avatar    String   @default("🌸")
+  content   String
+  timeAgo   String   @default("Just now") @map("time_ago")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("post_comments")
+}
+
+model Notification {
+  id               String   @id @default(cuid())
+  userId           Int      @default(1) @map("user_id")
+  text             String
+  notificationType String   @map("notification_type")
+  isRead           Boolean  @default(false) @map("is_read")
+  timeLabel        String   @default("Luteal Phase") @map("time_label")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
