@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { diffInDays, parseDateOnly } from '../utils/cycleEngine';
 import { Calendar, Trash2, ShieldAlert, Heart, Plus } from 'lucide-react';
 
 export const PeriodTracker: React.FC = () => {
@@ -54,11 +55,10 @@ export const PeriodTracker: React.FC = () => {
 
   // Helper: calculate length in days
   const getCycleDuration = (start: string, end: string) => {
-    const s = new Date(start);
-    const e = new Date(end);
-    const diffTime = Math.abs(e.getTime() - s.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-    return diffDays;
+    if (!start || !end) return 0;
+    const s = parseDateOnly(start);
+    const e = parseDateOnly(end);
+    return Math.max(1, Math.abs(diffInDays(e, s)) + 1);
   };
 
   // Helper: get pain description

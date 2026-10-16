@@ -60,11 +60,43 @@ export const apiProfile = {
     method: 'POST',
     body: JSON.stringify({ email }),
   }),
-  resetPassword: (email: string, newPassword: string) => request<{ token: string; user: UserProfile; message: string }>('/auth/reset-password', {
+  verifyOtp: (email: string, otp: string) => request<{ valid: boolean; message: string }>('/auth/verify-otp', {
     method: 'POST',
-    body: JSON.stringify({ email, newPassword }),
+    body: JSON.stringify({ email, otp }),
+  }),
+  resetPassword: (email: string, newPassword: string, otpCode?: string) => request<{ token: string; user: UserProfile; message: string }>('/auth/reset-password', {
+    method: 'POST',
+    body: JSON.stringify({ email, newPassword, otpCode }),
+  }),
+  deleteAccount: () => request<{ message: string }>('/auth/account', {
+    method: 'DELETE',
   }),
 };
+
+// Notifications API
+export interface NotificationItem {
+  id: string;
+  text: string;
+  time: string;
+  type: string;
+  read: boolean;
+  title?: string;
+}
+
+export const apiNotifications = {
+  getAll: () => request<NotificationItem[]>('/notifications'),
+  markRead: () => request<{ message: string }>('/notifications/read', {
+    method: 'PUT',
+  }),
+  create: (item: { title: string; message: string; type?: string; time?: string }) => request<NotificationItem>('/notifications', {
+    method: 'POST',
+    body: JSON.stringify(item),
+  }),
+  delete: (id: string) => request<{ message: string; id: string }>('/notifications/' + id, {
+    method: 'DELETE',
+  }),
+};
+
 
 // Cycle Logs API
 export const apiCycles = {

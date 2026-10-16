@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { formatDateYMD } from '../utils/cycleEngine';
 import { Flower, CheckCircle, BarChart3, Droplet, Dumbbell, ShieldAlert, Scale, Moon } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 export const SymptomTracker: React.FC = () => {
   const { symptoms, addSymptomLog } = useApp();
 
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = formatDateYMD();
   const todayLog = symptoms.find(s => s.date === todayStr) || {
     date: todayStr, cramps: 0, bloating: 0, headache: 0, acne: 0, backPain: 0,
     waterIntake: 1500, sleepHours: 7, weight: 58.0, exerciseMinutes: 30

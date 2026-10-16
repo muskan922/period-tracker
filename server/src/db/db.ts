@@ -121,6 +121,27 @@ export async function initDatabase() {
         }
       });
     }
+    const notifCount = await prisma.notification.count({ where: { userId: emma.id } });
+    if (notifCount === 0) {
+      await prisma.notification.createMany({
+        data: [
+          { userId: emma.id, text: 'AI Forecast: Your fertile window starts tomorrow. Stay hydrated 🌸', notificationType: 'ai', timeLabel: 'Luteal Phase', isRead: false },
+          { userId: emma.id, text: 'Reminder: Take Iron & Folic Acid pill at 08:30 AM.', notificationType: 'med', timeLabel: 'Luteal Phase', isRead: false },
+          { userId: emma.id, text: 'Dr. Evelyn Fontaine confirmed your appointment on Aug 3.', notificationType: 'app', timeLabel: 'Follicular Phase', isRead: true }
+        ]
+      });
+    }
+
+    const apptCount = await prisma.appointment.count({ where: { userId: emma.id } });
+    if (apptCount === 0) {
+      await prisma.appointment.createMany({
+        data: [
+          { userId: emma.id, doctorName: 'Dr. Evelyn Fontaine', specialty: 'Holistic Gynecologist', appointmentDate: new Date('2026-08-03'), appointmentTime: '10:00 AM', notes: 'Discuss hormone blood test results & herbal cycle infusions.', synced: true },
+          { userId: emma.id, doctorName: 'Dr. Sarah Lin', specialty: 'Endocrinologist', appointmentDate: new Date('2026-08-15'), appointmentTime: '02:30 PM', notes: 'Routine checkup for thyroid panel.', synced: false }
+        ]
+      });
+    }
+
     console.log('✨ Prisma ORM initialized and connected successfully to PostgreSQL!');
   } catch (err: any) {
     console.warn('⚠️ Prisma DB initialization warning:', err.message);

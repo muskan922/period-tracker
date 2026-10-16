@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { formatDateYMD } from '../utils/cycleEngine';
 import { Smile, BookOpen, Plus, HeartPulse } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export const MoodTracker: React.FC = () => {
   const { moods, addMood } = useApp();
 
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = formatDateYMD();
   const todayMood = moods.find(m => m.date === todayStr);
 
   const [selectedMood, setSelectedMood] = useState<'Happy' | 'Calm' | 'Sad' | 'Anxious' | 'Angry' | 'Tired' | ''>(todayMood?.mood || '');

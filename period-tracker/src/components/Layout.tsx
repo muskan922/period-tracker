@@ -19,7 +19,7 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = ({ children, currentTab, setCurrentTab }) => {
-  const { notifications, markNotificationsRead, profile, updateProfile } = useApp();
+  const { notifications, markNotificationsRead, profile, updateProfile, cycleEngine } = useApp();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -38,29 +38,8 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentTab, setCurrent
 
   const unreadNotificationsCount = notifications.filter(n => !n.read).length;
 
-  const getCycleDay = () => {
-    if (!profile.lastPeriodStart) return 23;
-    const start = new Date(profile.lastPeriodStart);
-    start.setHours(0, 0, 0, 0);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const diffTime = today.getTime() - start.getTime();
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    if (diffDays < 0) return 1;
-    return (diffDays % profile.cycleLength) + 1;
-  };
-
-  const currentCycleDay = getCycleDay();
-
-  const getCyclePhase = () => {
-    const periodLen = profile.periodLength || 5;
-    if (currentCycleDay <= periodLen) return { name: 'Menstrual Phase', emoji: '🩸' };
-    if (currentCycleDay <= 11) return { name: 'Follicular Phase', emoji: '🌱' };
-    if (currentCycleDay <= 16) return { name: 'Ovulation Phase', emoji: '🌸' };
-    return { name: 'Luteal Phase', emoji: '🌙' };
-  };
-
-  const currentPhase = getCyclePhase();
+  const currentCycleDay = cycleEngine.currentCycleDay;
+  const currentPhase = cycleEngine.currentPhase;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

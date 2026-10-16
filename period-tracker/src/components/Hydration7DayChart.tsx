@@ -11,6 +11,7 @@ import {
   Cell
 } from 'recharts';
 import type { DailySymptomLog } from '../context/AppContext';
+import { formatDateYMD } from '../utils/cycleEngine';
 
 interface Hydration7DayChartProps {
   symptoms: DailySymptomLog[];
@@ -27,7 +28,7 @@ export const Hydration7DayChart: React.FC<Hydration7DayChartProps> = ({ symptoms
     for (let i = 6; i >= 0; i--) {
       const d = new Date(today);
       d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().split('T')[0];
+      const dateStr = formatDateYMD(d);
       const foundLog = symptoms.find(s => s.date === dateStr);
       const waterMl = foundLog ? foundLog.waterIntake : 0;
       const waterL = parseFloat((waterMl / 1000).toFixed(2));

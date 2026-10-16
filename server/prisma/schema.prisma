@@ -8,18 +8,23 @@ generator client {
 }
 
 model User {
-  id               Int            @id @default(autoincrement())
-  name             String         @default("Emma Rose")
-  email            String         @unique @default("emma@flora.com")
-  passwordHash     String         @default("$2a$10$abcdefghijklmnopqrstuv") @map("password_hash")
-  avatar           String         @default("https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200")
-  age              Int            @default(26)
-  cycleLength      Int            @default(28) @map("cycle_length")
-  periodLength     Int            @default(5) @map("period_length")
-  lastPeriodStart  DateTime?      @default(now()) @map("last_period_start")
-  theme            String         @default("vintage")
-  waterTarget      Int            @default(2500) @map("water_target")
-  createdAt        DateTime       @default(now()) @map("created_at")
+  id                   Int            @id @default(autoincrement())
+  name                 String         @default("Emma Rose")
+  email                String         @unique @default("emma@flora.com")
+  passwordHash         String         @default("$2a$10$abcdefghijklmnopqrstuv") @map("password_hash")
+  avatar               String         @default("https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200")
+  age                  Int            @default(26)
+  cycleLength          Int            @default(28) @map("cycle_length")
+  periodLength         Int            @default(5) @map("period_length")
+  lastPeriodStart      DateTime?      @default(now()) @map("last_period_start")
+  theme                String         @default("vintage")
+  waterTarget          Int            @default(2500) @map("water_target")
+  goals                String[]       @default(["Balance hormones naturally", "Improve sleep quality", "Log mood changes daily"])
+  connectedDevices     String[]       @default(["Apple Watch", "Apple Health"]) @map("connected_devices")
+  notificationsEnabled Boolean        @default(true) @map("notifications_enabled")
+  resetToken           String?        @map("reset_token")
+  resetTokenExp        DateTime?      @map("reset_token_exp")
+  createdAt            DateTime       @default(now()) @map("created_at")
 
   cycleLogs        CycleLog[]
   moodLogs         MoodLog[]
@@ -27,6 +32,8 @@ model User {
   medications      Medication[]
   appointments     Appointment[]
   communityPosts   CommunityPost[]
+  postLikes        PostLike[]
+  postSaves        PostSave[]
   notifications    Notification[]
 
   @@map("users")
@@ -141,10 +148,38 @@ model CommunityPost {
   timeAgo   String   @default("Just now") @map("time_ago")
   createdAt DateTime @default(now()) @map("created_at")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  comments PostComment[]
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments  PostComment[]
+  postLikes PostLike[]
+  postSaves PostSave[]
 
   @@map("community_posts")
+}
+
+model PostLike {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  postId    String   @map("post_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@map("post_likes")
+}
+
+model PostSave {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  postId    String   @map("post_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@map("post_saves")
 }
 
 model PostComment {

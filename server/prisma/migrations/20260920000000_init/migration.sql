@@ -11,6 +11,11 @@ CREATE TABLE "users" (
     "last_period_start" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "theme" TEXT NOT NULL DEFAULT 'vintage',
     "water_target" INTEGER NOT NULL DEFAULT 2500,
+    "goals" TEXT[] DEFAULT ARRAY['Balance hormones naturally', 'Improve sleep quality', 'Log mood changes daily']::TEXT[],
+    "connected_devices" TEXT[] DEFAULT ARRAY['Apple Watch', 'Apple Health']::TEXT[],
+    "notifications_enabled" BOOLEAN NOT NULL DEFAULT true,
+    "reset_token" TEXT,
+    "reset_token_exp" TIMESTAMP(3),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
@@ -56,6 +61,9 @@ CREATE TABLE "symptom_logs" (
     "sleep_hours" DOUBLE PRECISION NOT NULL DEFAULT 7.0,
     "weight" DOUBLE PRECISION NOT NULL DEFAULT 58.0,
     "exercise_minutes" INTEGER NOT NULL DEFAULT 0,
+    "energy" INTEGER DEFAULT 7,
+    "libido" INTEGER DEFAULT 3,
+    "journal" TEXT,
 
     CONSTRAINT "symptom_logs_pkey" PRIMARY KEY ("id")
 );
@@ -142,6 +150,26 @@ CREATE TABLE "notifications" (
     CONSTRAINT "notifications_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "post_likes" (
+    "id" SERIAL NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "post_id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "post_likes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "post_saves" (
+    "id" SERIAL NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "post_id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "post_saves_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -153,6 +181,12 @@ CREATE UNIQUE INDEX "symptom_logs_user_id_log_date_key" ON "symptom_logs"("user_
 
 -- CreateIndex
 CREATE UNIQUE INDEX "medication_completions_medication_id_completed_date_key" ON "medication_completions"("medication_id", "completed_date");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "post_likes_user_id_post_id_key" ON "post_likes"("user_id", "post_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "post_saves_user_id_post_id_key" ON "post_saves"("user_id", "post_id");
 
 -- AddForeignKey
 ALTER TABLE "cycle_logs" ADD CONSTRAINT "cycle_logs_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -180,3 +214,16 @@ ALTER TABLE "post_comments" ADD CONSTRAINT "post_comments_post_id_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "notifications" ADD CONSTRAINT "notifications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "post_likes" ADD CONSTRAINT "post_likes_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "post_likes" ADD CONSTRAINT "post_likes_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "community_posts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "post_saves" ADD CONSTRAINT "post_saves_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "post_saves" ADD CONSTRAINT "post_saves_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "community_posts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+

@@ -1,5 +1,5 @@
 import type { DailySymptomLog, MoodLog } from '../context/AppContext';
-import type { CycleEngineResult } from './cycleEngine';
+import { type CycleEngineResult, formatDateYMD } from './cycleEngine';
 
 export interface PersonalBaseline {
   avgWaterIntake: number;      // ml
@@ -50,16 +50,27 @@ export function calculatePersonalBaseline(
     };
   }
 
-  // Calculate averages
-  const waterSum = symptomLogs.reduce((acc, l) => acc + (l.waterIntake || 0), 0);
-  const sleepSum = symptomLogs.reduce((acc, l) => acc + (l.sleepHours || 0), 0);
-  const energySum = symptomLogs.reduce((acc, l) => acc + (l.energy ?? 7), 0);
-  const libidoSum = symptomLogs.reduce((acc, l) => acc + (l.libido ?? 3), 0);
+  // Calculate averages considering only days where specific metrics were tracked
+  const waterLogs = symptomLogs.filter(l => (l.waterIntake || 0) > 0);
+  const sleepLogs = symptomLogs.filter(l => (l.sleepHours || 0) > 0);
+  const energyLogs = symptomLogs.filter(l => l.energy !== undefined && l.energy !== null);
+  const libidoLogs = symptomLogs.filter(l => l.libido !== undefined && l.libido !== null);
 
-  const avgWaterIntake = Math.round(waterSum / totalDaysLogged);
-  const avgSleepHours = Math.round((sleepSum / totalDaysLogged) * 10) / 10;
-  const avgEnergyLevel = Math.round((energySum / totalDaysLogged) * 10) / 10;
-  const avgLibidoLevel = Math.round((libidoSum / totalDaysLogged) * 10) / 10;
+  const avgWaterIntake = waterLogs.length > 0
+    ? Math.round(waterLogs.reduce((acc, l) => acc + l.waterIntake, 0) / waterLogs.length)
+    : 2000;
+
+  const avgSleepHours = sleepLogs.length > 0
+    ? Math.round((sleepLogs.reduce((acc, l) => acc + l.sleepHours, 0) / sleepLogs.length) * 10) / 10
+    : 7.5;
+
+  const avgEnergyLevel = energyLogs.length > 0
+    ? Math.round((energyLogs.reduce((acc, l) => acc + (l.energy as number), 0) / energyLogs.length) * 10) / 10
+    : 7;
+
+  const avgLibidoLevel = libidoLogs.length > 0
+    ? Math.round((libidoLogs.reduce((acc, l) => acc + (l.libido as number), 0) / libidoLogs.length) * 10) / 10
+    : 3;
 
   // Most frequent moods
   const moodCounts: Record<string, number> = {};
@@ -105,7 +116,7 @@ export function generatePatternInsights(
   moodLogs: MoodLog[] = [],
   baseline: PersonalBaseline,
   cycleEngine: CycleEngineResult,
-  targetDateStr: string = new Date().toISOString().split('T')[0]
+  targetDateStr: string = formatDateYMD()
 ): PersonalInsight[] {
   const insights: PersonalInsight[] = [];
 
@@ -122,7 +133,8 @@ export function generatePatternInsights(
     ];
   }
 
-  const todayLog = symptomLogs.find(s => s.date === targetDateStr) || symptomLogs[0];
+  // Find exact log for targetDate, or null if unlogged (never fallback to unrelated day)
+  const todayLog = symptomLogs.find(s => s.date === targetDateStr) || null;
 
   // 1. Water Intake Insight
   if (todayLog && todayLog.waterIntake > 0 && baseline.avgWaterIntake > 0) {
@@ -144,6 +156,14 @@ export function generatePatternInsights(
         icon: '💧'
       });
     }
+  } else if (!todayLog) {
+    insights.push({
+      id: 'ins-checkin-today',
+      category: 'cycle',
+      title: 'Daily Sanctuary Check-in',
+      description: 'You haven\'t logged today yet. Record your symptoms, hydration, and mood to maintain peak cycle predictions.',
+      icon: '🌸'
+    });
   }
 
   // 2. Sleep ↔ Energy Correlation Insight
@@ -286,14 +306,14 @@ export function generateSmartRecommendations(
   symptomLogs: DailySymptomLog[] = [],
   baseline: PersonalBaseline,
   cycleEngine: CycleEngineResult,
-  targetDateStr: string = new Date().toISOString().split('T')[0]
+  targetDateStr: string = formatDateYMD()
 ): Recommendation[] {
   const recommendations: Recommendation[] = [];
-  const todayLog = symptomLogs.find(s => s.date === targetDateStr) || symptomLogs[0];
+  const todayLog = symptomLogs.find(s => s.date === targetDateStr) || null;
   const phase = cycleEngine.currentPhase;
 
   // 1. Sleep + Energy Recommendation
-  if (todayLog && (todayLog.sleepHours < baseline.avgSleepHours || (todayLog.energy ?? 5) < 5)) {
+  if (todayLog && ((todayLog.sleepHours > 0 && todayLog.sleepHours < baseline.avgSleepHours) || (todayLog.energy ?? 7) < 5)) {
     recommendations.push({
       id: 'rec-rest',
       title: 'Prioritize Soothing Rest',
@@ -304,17 +324,28 @@ export function generateSmartRecommendations(
   }
 
   // 2. Hydration Recommendation
-  if (todayLog && todayLog.waterIntake < baseline.avgWaterIntake * 0.8) {
+  if (todayLog && todayLog.waterIntake > 0 && todayLog.waterIntake < baseline.avgWaterIntake * 0.8) {
     recommendations.push({
       id: 'rec-water',
       title: 'Hydration Refresh',
       category: 'Hydration Target',
-      description: `Today's water intake is trailing your personal average of ${baseline.avgWaterIntake}ml. Sip warm herbal infusions or water.`,
+      description: `Today's water intake (${todayLog.waterIntake}ml) is trailing your personal average of ${baseline.avgWaterIntake}ml. Sip warm herbal infusions or water.`,
       actionHint: `Goal: ${baseline.avgWaterIntake}ml`
     });
   }
 
-  // 3. Cycle Phase Recommendation
+  // 3. Unlogged Day Recommendation
+  if (!todayLog) {
+    recommendations.push({
+      id: 'rec-log-today',
+      title: 'Log Today\'s Symptoms & Water',
+      category: 'Daily Mindful Practice',
+      description: 'Track how your body feels today to keep your hormone curves, sleep patterns, and cycle predictions pinpoint accurate.',
+      actionHint: 'Take 30 seconds to log'
+    });
+  }
+
+  // 4. Cycle Phase Recommendation
   if (phase.phaseType === 'Luteal') {
     recommendations.push({
       id: 'rec-luteal-nourish',
@@ -343,3 +374,4 @@ export function generateSmartRecommendations(
 
   return recommendations;
 }
+

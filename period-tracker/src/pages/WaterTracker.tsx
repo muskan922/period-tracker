@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { formatDateYMD } from '../utils/cycleEngine';
 import { Hydration7DayChart } from '../components/Hydration7DayChart';
 import { MenstrualHydrationInsights } from '../components/MenstrualHydrationInsights';
 import { HydrationSmartReminderCard } from '../components/HydrationSmartReminderCard';
@@ -24,7 +25,7 @@ import {
 export const WaterTracker: React.FC = () => {
   const { profile, symptoms, updateWaterIntake, setWaterTarget } = useApp();
 
-  const getTodayString = () => new Date().toISOString().split('T')[0];
+  const getTodayString = () => formatDateYMD();
   const [selectedDate, setSelectedDate] = useState<string>(getTodayString());
 
   const hasUserChosenTarget = Boolean(profile.waterTarget && profile.waterTarget > 0);
@@ -152,7 +153,7 @@ export const WaterTracker: React.FC = () => {
     const today = getTodayString();
     const yesterdayDate = new Date();
     yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-    const yesterday = yesterdayDate.toISOString().split('T')[0];
+    const yesterday = formatDateYMD(yesterdayDate);
 
     if (dateStr === today) return 'Today';
     if (dateStr === yesterday) return 'Yesterday';

@@ -11,6 +11,7 @@ import medicationRoutes from './routes/medicationRoutes';
 import appointmentRoutes from './routes/appointmentRoutes';
 import communityRoutes from './routes/communityRoutes';
 import aiRoutes from './routes/aiRoutes';
+import notificationRoutes from './routes/notificationRoutes';
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use('/api/medications', medicationRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/community', communityRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Root endpoint
 app.get('/', (req: Request, res: Response) => {
@@ -173,7 +175,7 @@ app.get('/', (req: Request, res: Response) => {
         
         <div class="link-card">
           <strong>Frontend Web App:</strong><br>
-          <a href="http://localhost:5174" target="_blank">http://localhost:5174</a>
+          <a href="http://localhost:5173" target="_blank">http://localhost:5173</a>
         </div>
         
         <div class="link-card">

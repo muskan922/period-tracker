@@ -7,34 +7,42 @@ const router = Router();
 // GET all community posts with comments
 router.get('/', async (req: Request, res: Response) => {
   try {
+    const userId = getUserIdFromReq(req);
     const posts = await prisma.communityPost.findMany({
       include: {
         comments: {
           orderBy: { createdAt: 'asc' }
-        }
+        },
+        postLikes: true,
+        postSaves: true
       },
       orderBy: { createdAt: 'desc' }
     });
 
-    const formatted = posts.map(p => ({
-      id: p.id,
-      author: p.author,
-      avatar: p.avatar,
-      title: p.title,
-      content: p.content,
-      tags: p.tags,
-      likes: p.likes,
-      liked: p.liked,
-      saved: p.saved,
-      time: p.timeAgo,
-      comments: p.comments.map(c => ({
-        id: c.id,
-        author: c.author,
-        avatar: c.avatar,
-        content: c.content,
-        time: c.timeAgo
-      }))
-    }));
+    const formatted = posts.map(p => {
+      const isLiked = userId ? p.postLikes.some(l => l.userId === userId) : p.liked;
+      const isSaved = userId ? p.postSaves.some(s => s.userId === userId) : p.saved;
+      const totalLikes = Math.max(p.likes, p.postLikes.length);
+      return {
+        id: p.id,
+        author: p.author,
+        avatar: p.avatar,
+        title: p.title,
+        content: p.content,
+        tags: p.tags,
+        likes: totalLikes,
+        liked: isLiked,
+        saved: isSaved,
+        time: p.timeAgo,
+        comments: p.comments.map(c => ({
+          id: c.id,
+          author: c.author,
+          avatar: c.avatar,
+          content: c.content,
+          time: c.timeAgo
+        }))
+      };
+    });
 
     res.json(formatted);
   } catch (error) {
@@ -87,6 +95,7 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
 
 // LIKE post
 router.post('/:id/like', requireAuth, async (req: Request, res: Response) => {
+  const userId = getUserIdFromReq(req);
   const { id } = req.params;
   try {
     const post = await prisma.communityPost.findUnique({
@@ -95,18 +104,31 @@ router.post('/:id/like', requireAuth, async (req: Request, res: Response) => {
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
-    const newLiked = !post.liked;
-    const newLikes = newLiked ? post.likes + 1 : Math.max(0, post.likes - 1);
 
-    const updated = await prisma.communityPost.update({
-      where: { id },
-      data: {
-        liked: newLiked,
-        likes: newLikes
+    const existingLike = await prisma.postLike.findUnique({
+      where: {
+        userId_postId: { userId, postId: id }
       }
     });
 
-    res.json({ id: updated.id, likes: updated.likes, liked: updated.liked });
+    let liked = false;
+    if (existingLike) {
+      await prisma.postLike.delete({ where: { id: existingLike.id } });
+      liked = false;
+    } else {
+      await prisma.postLike.create({
+        data: { userId, postId: id }
+      });
+      liked = true;
+    }
+
+    const currentLikesCount = await prisma.postLike.count({ where: { postId: id } });
+    await prisma.communityPost.update({
+      where: { id },
+      data: { likes: currentLikesCount }
+    });
+
+    res.json({ id, likes: currentLikesCount, liked });
   } catch (error) {
     console.error('Error liking post:', error);
     res.status(500).json({ error: 'Failed to toggle post like' });
@@ -115,6 +137,7 @@ router.post('/:id/like', requireAuth, async (req: Request, res: Response) => {
 
 // SAVE post
 router.post('/:id/save', requireAuth, async (req: Request, res: Response) => {
+  const userId = getUserIdFromReq(req);
   const { id } = req.params;
   try {
     const post = await prisma.communityPost.findUnique({
@@ -124,14 +147,24 @@ router.post('/:id/save', requireAuth, async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    const updated = await prisma.communityPost.update({
-      where: { id },
-      data: {
-        saved: !post.saved
+    const existingSave = await prisma.postSave.findUnique({
+      where: {
+        userId_postId: { userId, postId: id }
       }
     });
 
-    res.json({ id: updated.id, saved: updated.saved });
+    let saved = false;
+    if (existingSave) {
+      await prisma.postSave.delete({ where: { id: existingSave.id } });
+      saved = false;
+    } else {
+      await prisma.postSave.create({
+        data: { userId, postId: id }
+      });
+      saved = true;
+    }
+
+    res.json({ id, saved });
   } catch (error) {
     console.error('Error saving post:', error);
     res.status(500).json({ error: 'Failed to toggle post save' });

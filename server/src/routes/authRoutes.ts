@@ -16,14 +16,14 @@ function formatUser(user: any) {
     lastPeriodStart: user.lastPeriodStart ? user.lastPeriodStart.toISOString().split('T')[0] : '2026-07-05',
     theme: user.theme,
     waterTarget: user.waterTarget,
-    goals: ['Balance hormones naturally', 'Improve sleep quality', 'Log mood changes daily'],
+    goals: Array.isArray(user.goals) && user.goals.length > 0 ? user.goals : ['Balance hormones naturally', 'Improve sleep quality', 'Log mood changes daily'],
     achievements: [
       { title: '10-Day Streak logged', date: '2026-07-20', icon: '✨' },
       { title: 'Hydration Target Met', date: '2026-07-25', icon: '💧' },
       { title: 'Perfect Sleep Cycle', date: '2026-07-27', icon: '🌙' }
     ],
-    connectedDevices: ['Apple Watch', 'Apple Health'],
-    notificationsEnabled: true
+    connectedDevices: Array.isArray(user.connectedDevices) && user.connectedDevices.length > 0 ? user.connectedDevices : ['Apple Watch', 'Apple Health'],
+    notificationsEnabled: user.notificationsEnabled ?? true
   };
 }
 
@@ -169,10 +169,25 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'No account found with this email address' });
     }
 
+    // Generate secure 6-digit OTP code valid for 15 minutes
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const exp = new Date(Date.now() + 15 * 60 * 1000);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        resetToken: otp,
+        resetTokenExp: exp
+      }
+    });
+
+    console.log(`🌸 [Flora Security] Password reset OTP for ${user.email}: ${otp}`);
+
     res.json({
       message: 'Passcode sent successfully',
       otpRequired: true,
-      email: user.email
+      email: user.email,
+      demoOtp: otp
     });
   } catch (error) {
     console.error('Error in forgot-password:', error);
@@ -180,9 +195,47 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
   }
 });
 
+// POST Verify OTP
+router.post('/verify-otp', async (req: Request, res: Response) => {
+  const { email, otpCode } = req.body;
+
+  if (!email || !otpCode) {
+    return res.status(400).json({ error: 'Email and passcode are required' });
+  }
+
+  try {
+    const cleanEmail = email.trim().toLowerCase();
+    const user = await prisma.user.findFirst({
+      where: {
+        email: {
+          equals: cleanEmail,
+          mode: 'insensitive'
+        }
+      }
+    });
+
+    if (!user || !user.resetToken || !user.resetTokenExp) {
+      return res.status(400).json({ error: 'No active password reset request found. Please request a new passcode.' });
+    }
+
+    if (user.resetTokenExp < new Date()) {
+      return res.status(400).json({ error: 'Passcode has expired. Please request a new one.' });
+    }
+
+    if (user.resetToken !== otpCode.trim()) {
+      return res.status(400).json({ error: 'Incorrect passcode. Please check and try again.' });
+    }
+
+    res.json({ valid: true, message: 'Passcode verified successfully' });
+  } catch (error) {
+    console.error('Error verifying OTP:', error);
+    res.status(500).json({ error: 'Failed to verify passcode' });
+  }
+});
+
 // POST Reset Password
 router.post('/reset-password', async (req: Request, res: Response) => {
-  const { email, newPassword } = req.body;
+  const { email, newPassword, otpCode } = req.body;
 
   if (!email || !email.trim()) {
     return res.status(400).json({ error: 'Email address is required' });
@@ -207,10 +260,22 @@ router.post('/reset-password', async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'User account not found' });
     }
 
+    // Require matching OTP if resetToken is recorded
+    if (user.resetToken) {
+      if (!otpCode || otpCode.trim() !== user.resetToken) {
+        return res.status(400).json({ error: 'Invalid or missing passcode for password reset' });
+      }
+      if (user.resetTokenExp && user.resetTokenExp < new Date()) {
+        return res.status(400).json({ error: 'Passcode has expired. Please request a new one.' });
+      }
+    }
+
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
       data: {
-        passwordHash: hashPassword(newPassword)
+        passwordHash: hashPassword(newPassword),
+        resetToken: null,
+        resetTokenExp: null
       }
     });
 
@@ -249,7 +314,7 @@ router.get('/profile', requireAuth, async (req: Request, res: Response) => {
 // UPDATE User Profile
 router.put('/profile', requireAuth, async (req: Request, res: Response) => {
   const userId = (req as any).userId;
-  const { name, age, cycleLength, periodLength, lastPeriodStart, theme, waterTarget } = req.body;
+  const { name, age, cycleLength, periodLength, lastPeriodStart, theme, waterTarget, goals, connectedDevices, notificationsEnabled } = req.body;
 
   try {
     const user = await prisma.user.findUnique({
@@ -270,6 +335,9 @@ router.put('/profile', requireAuth, async (req: Request, res: Response) => {
         ...(lastPeriodStart !== undefined && { lastPeriodStart: new Date(lastPeriodStart) }),
         ...(theme !== undefined && { theme }),
         ...(waterTarget !== undefined && { waterTarget }),
+        ...(goals !== undefined && { goals }),
+        ...(connectedDevices !== undefined && { connectedDevices }),
+        ...(notificationsEnabled !== undefined && { notificationsEnabled }),
       }
     });
 
@@ -277,6 +345,20 @@ router.put('/profile', requireAuth, async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error updating profile:', error);
     res.status(500).json({ error: 'Failed to update profile' });
+  }
+});
+
+// DELETE User Account
+router.delete('/account', requireAuth, async (req: Request, res: Response) => {
+  const userId = (req as any).userId;
+  try {
+    await prisma.user.delete({
+      where: { id: userId }
+    });
+    res.json({ message: 'Sanctuary account deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    res.status(500).json({ error: 'Failed to delete account' });
   }
 });
 

@@ -65,9 +65,17 @@ router.post('/', async (req: Request, res: Response) => {
 
 // TOGGLE medication completion state for a date
 router.post('/toggle', async (req: Request, res: Response) => {
+  const userId = getUserIdFromReq(req);
   const { id, date } = req.body;
   const completedDateObj = new Date(date);
   try {
+    const med = await prisma.medication.findFirst({
+      where: { id, userId }
+    });
+    if (!med) {
+      return res.status(404).json({ error: 'Medication not found or unauthorized' });
+    }
+
     const existing = await prisma.medicationCompletion.findUnique({
       where: {
         medicationId_completedDate: {

@@ -6,9 +6,10 @@ import {
   apiSymptoms,
   apiMedications,
   apiAppointments,
-  apiCommunity
+  apiCommunity,
+  apiNotifications
 } from '../services/api';
-import { calculateCycleEngine, type CycleEngineResult } from '../utils/cycleEngine';
+import { calculateCycleEngine, formatDateYMD, type CycleEngineResult } from '../utils/cycleEngine';
 import {
   calculatePersonalBaseline,
   generatePatternInsights,
@@ -210,7 +211,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     for (let i = 0; i < 30; i++) {
       const d = new Date(today);
       d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().split('T')[0];
+      const dateStr = formatDateYMD(d);
       const water = waterPattern[i % waterPattern.length];
       logs.push({
         date: dateStr,
@@ -340,7 +341,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     async function loadBackendData() {
       if (!isLoggedIn || !localStorage.getItem('flora-token')) return;
       try {
-        const [prof, fetchedCycles, fetchedMoods, fetchedSymptoms, fetchedMeds, fetchedApps, fetchedPosts] = await Promise.all([
+        const [prof, fetchedCycles, fetchedMoods, fetchedSymptoms, fetchedMeds, fetchedApps, fetchedPosts, fetchedNotifications] = await Promise.all([
           apiProfile.get().catch(() => null),
           apiCycles.getAll().catch(() => null),
           apiMoods.getAll().catch(() => null),
@@ -348,6 +349,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           apiMedications.getAll().catch(() => null),
           apiAppointments.getAll().catch(() => null),
           apiCommunity.getAll().catch(() => null),
+          apiNotifications.getAll().catch(() => null),
         ]);
 
         if (prof) setProfile(prev => ({ ...prev, ...prof }));
@@ -357,6 +359,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (fetchedMeds && fetchedMeds.length > 0) setMedications(fetchedMeds);
         if (fetchedApps && fetchedApps.length > 0) setAppointments(fetchedApps);
         if (fetchedPosts && fetchedPosts.length > 0) setPosts(fetchedPosts);
+        if (fetchedNotifications && fetchedNotifications.length > 0) setNotifications(fetchedNotifications);
       } catch (e) {
         console.log('Running in client offline mode or session expired.');
       }
@@ -584,6 +587,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const markNotificationsRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    apiNotifications.markRead().catch(() => {});
   };
 
   return (

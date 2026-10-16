@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp, type Medication } from '../context/AppContext';
+import { formatDateYMD } from '../utils/cycleEngine';
 import { Pill, Bell, Plus, Check, Clock, Award, Edit3, Trash2, X, AlertCircle } from 'lucide-react';
 
 export const MedicationPage: React.FC = () => {
@@ -18,7 +19,7 @@ export const MedicationPage: React.FC = () => {
   const [notify, setNotify] = useState(true);
 
   // Dynamic today's date
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = formatDateYMD();
 
   const resetForm = () => {
     setName('');

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { apiProfile } from '../services/api';
 import { Settings, Shield, Bell, Languages, ShieldAlert, Check, RefreshCw, Cpu } from 'lucide-react';
 
 export const SettingsPage: React.FC = () => {
@@ -123,10 +124,16 @@ export const SettingsPage: React.FC = () => {
                 Export Cycle JSON Logs
               </button>
               <button 
-                onClick={() => {
+                onClick={async () => {
                   if (confirm('Are you completely sure you want to wipe your sanctuary database? This is irreversible.')) {
-                    alert('Sanctuary deleted.');
-                    window.location.reload();
+                    try {
+                      await apiProfile.deleteAccount();
+                    } catch (e) {
+                      // ignore if backend offline
+                    }
+                    localStorage.removeItem('flora-token');
+                    alert('Sanctuary deleted successfully.');
+                    window.location.href = '/login';
                   }
                 }}
                 className="flex-1 py-2.5 rounded-full border border-red-200 text-xs font-semibold text-red-500 bg-white hover:bg-red-50/50 transition-colors text-center"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import { calculateCycleEngine } from '../utils/cycleEngine';
+import { calculateCycleEngine, formatDateYMD } from '../utils/cycleEngine';
 import { CustomCalendar } from '../components/CustomCalendar';
 import {
   Droplet,
@@ -47,7 +47,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
   const [showWisdomModal, setShowWisdomModal] = React.useState(false);
 
   // Find today's date in YYYY-MM-DD
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = formatDateYMD();
   const [selectedDate, setSelectedDate] = React.useState<string>(todayStr);
 
   // Calculate Cycle Engine result dynamically based on selected date
@@ -96,7 +96,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       const dayOffset = index - ((new Date().getDay() + 6) % 7);
       const d = new Date();
       d.setDate(d.getDate() + dayOffset);
-      const dStr = d.toISOString().split('T')[0];
+      const dStr = formatDateYMD(d);
       const logged = symptoms.find(s => s.date === dStr);
       if (logged && logged.energy !== undefined && logged.energy > 0) {
         return { name: dayName, level: logged.energy * 10 };

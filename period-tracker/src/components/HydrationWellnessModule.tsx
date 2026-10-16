@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { formatDateYMD } from '../utils/cycleEngine';
 import {
   Droplet,
   Target,
@@ -31,7 +32,7 @@ import {
 export const HydrationWellnessModule: React.FC = () => {
   const { profile, symptoms, updateWaterIntake, setWaterTarget, cycleEngine } = useApp();
 
-  const getTodayString = () => new Date().toISOString().split('T')[0];
+  const getTodayString = () => formatDateYMD();
   const [selectedDate, setSelectedDate] = useState<string>(getTodayString());
 
   // Personalization: Target water intake in ML (default 2000ml if not set)
@@ -141,7 +142,7 @@ export const HydrationWellnessModule: React.FC = () => {
     for (let i = 6; i >= 0; i--) {
       const d = new Date(today);
       d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().split('T')[0];
+      const dateStr = formatDateYMD(d);
       const foundLog = symptoms.find(s => s.date === dateStr);
       const waterMl = foundLog ? foundLog.waterIntake : 0;
       const waterL = parseFloat((waterMl / 1000).toFixed(2));

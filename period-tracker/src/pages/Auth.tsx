@@ -134,7 +134,7 @@ export const Auth: React.FC<AuthProps> = ({ initialStep = 'login' }) => {
     }
   };
 
-  const handleOtpSubmit = (e: React.FormEvent) => {
+  const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -144,7 +144,12 @@ export const Auth: React.FC<AuthProps> = ({ initialStep = 'login' }) => {
     }
 
     if (authStep === 'otp' && email && !name) {
-      setAuthStep('reset'); // coming from forgot password, go to reset password
+      try {
+        await apiProfile.verifyOtp(email, otpCode.trim());
+        setAuthStep('reset'); // coming from forgot password, go to reset password
+      } catch (err: any) {
+        setError(err.message || 'Invalid or expired passcode');
+      }
     } else {
       if (name) {
         updateProfile({ name });
@@ -164,7 +169,7 @@ export const Auth: React.FC<AuthProps> = ({ initialStep = 'login' }) => {
     }
 
     try {
-      const res = await apiProfile.resetPassword(email, newPassword);
+      const res = await apiProfile.resetPassword(email, newPassword, otpCode.trim());
       if (res && res.token) {
         localStorage.setItem('flora-token', res.token);
         if (res.user) {

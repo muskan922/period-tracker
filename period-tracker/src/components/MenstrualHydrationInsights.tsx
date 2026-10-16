@@ -1,6 +1,7 @@
 import React from 'react';
 import { Heart, Sparkles, Droplet, Moon, Zap, Activity, Info } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { formatDateYMD, parseDateOnly } from '../utils/cycleEngine';
 
 interface MenstrualHydrationInsightsProps {
   selectedDate: string;
@@ -18,12 +19,12 @@ export const MenstrualHydrationInsights: React.FC<MenstrualHydrationInsightsProp
 
   // Calculate last 7 days average
   const last7DaysLogs = React.useMemo(() => {
-    const today = new Date(selectedDate);
+    const today = parseDateOnly(selectedDate);
     const logs = [];
     for (let i = 0; i < 7; i++) {
       const d = new Date(today);
       d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().split('T')[0];
+      const dateStr = formatDateYMD(d);
       const found = symptoms.find(s => s.date === dateStr);
       if (found) logs.push(found);
     }
