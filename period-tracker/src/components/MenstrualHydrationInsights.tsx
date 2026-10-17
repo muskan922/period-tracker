@@ -78,11 +78,11 @@ export const MenstrualHydrationInsights: React.FC<MenstrualHydrationInsightsProp
   }, [last7DaysLogs, targetMl, currentWaterMl, avg7DayMl, cycleInfo.phase, currentLog]);
 
   return (
-    <div className="glass-card rounded-premium-xl p-6 md:p-8 space-y-5 bg-gradient-to-b from-primary/20 via-secondary/30 to-cream/30 border border-borderPink/60">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-borderPink/40">
+    <div className="glass-card rounded-premium-xl p-6 md:p-8 space-y-5 bg-gradient-to-b from-primary/20 via-secondary/30 to-cream/30 dark:from-primary/10 dark:via-white/5 dark:to-[#1A1A23] border border-borderPink/60 dark:border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-borderPink/40 dark:border-white/10">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/40 text-darkText text-xs font-bold mb-1 border border-borderPink/60">
-            <Heart className="w-3.5 h-3.5 text-rose-500" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/40 dark:bg-white/10 text-darkText text-xs font-bold mb-1 border border-borderPink/60 dark:border-white/10">
+            <Heart className="w-3.5 h-3.5 text-rose-500 dark:text-rose-400" />
             Cycle Connection & Wellness Matrix
           </div>
           <h3 className="font-heading text-xl font-bold text-darkText">
@@ -93,7 +93,7 @@ export const MenstrualHydrationInsights: React.FC<MenstrualHydrationInsightsProp
           </p>
         </div>
 
-        <div className="px-3 py-2 rounded-premium-lg bg-white/90 border border-borderPink/60 shrink-0 shadow-sm">
+        <div className="px-3 py-2 rounded-premium-lg bg-white/90 dark:bg-white/5 border border-borderPink/60 dark:border-white/10 shrink-0 shadow-sm">
           <span className="text-[10px] uppercase font-bold text-vintageText block">Cycle Phase</span>
           <span className="font-heading font-bold text-xs text-darkText block">
             {cycleInfo.phase} (Day {cycleInfo.currentDay})
@@ -103,37 +103,37 @@ export const MenstrualHydrationInsights: React.FC<MenstrualHydrationInsightsProp
 
       {/* Multi-variable lifestyle snapshot */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-        <div className="p-3 rounded-lg bg-white/90 border border-borderPink/60 space-y-1 shadow-sm">
+        <div className="p-3 rounded-lg bg-white/90 dark:bg-white/5 border border-borderPink/60 dark:border-white/10 space-y-1 shadow-sm">
           <span className="text-vintageText flex items-center gap-1 text-[11px]">
             <Droplet className="w-3.5 h-3.5 text-accent" /> Water Consumed
           </span>
           <span className="font-heading font-bold text-darkText block">{currentWaterL.toFixed(2)} / {targetL.toFixed(1)} L</span>
         </div>
 
-        <div className="p-3 rounded-lg bg-white/90 border border-borderPink/60 space-y-1 shadow-sm">
+        <div className="p-3 rounded-lg bg-white/90 dark:bg-white/5 border border-borderPink/60 dark:border-white/10 space-y-1 shadow-sm">
           <span className="text-vintageText flex items-center gap-1 text-[11px]">
             <Moon className="w-3.5 h-3.5 text-rosegold" /> Sleep Logged
           </span>
           <span className="font-heading font-bold text-darkText block">{currentLog?.sleepHours || 7.5} Hours</span>
         </div>
 
-        <div className="p-3 rounded-lg bg-white/90 border border-borderPink/60 space-y-1 shadow-sm">
+        <div className="p-3 rounded-lg bg-white/90 dark:bg-white/5 border border-borderPink/60 dark:border-white/10 space-y-1 shadow-sm">
           <span className="text-vintageText flex items-center gap-1 text-[11px]">
-            <Zap className="w-3.5 h-3.5 text-warning" /> Vitals Logged
+            <Zap className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" /> Vitals Logged
           </span>
           <span className="font-heading font-bold text-darkText block">{currentLog?.exerciseMinutes || 30} mins active</span>
         </div>
 
-        <div className="p-3 rounded-lg bg-white/90 border border-borderPink/60 space-y-1 shadow-sm">
+        <div className="p-3 rounded-lg bg-white/90 dark:bg-white/5 border border-borderPink/60 dark:border-white/10 space-y-1 shadow-sm">
           <span className="text-vintageText flex items-center gap-1 text-[11px]">
-            <Activity className="w-3.5 h-3.5 text-rose-500" /> Cramp Severity
+            <Activity className="w-3.5 h-3.5 text-rose-500 dark:text-rose-400" /> Cramp Severity
           </span>
           <span className="font-heading font-bold text-darkText block">{currentLog?.cramps || 0} / 10</span>
         </div>
       </div>
 
       {/* Wellness Insights Output */}
-      <div className="p-4 rounded-premium-lg bg-white/95 border border-borderPink/60 space-y-2.5 shadow-sm">
+      <div className="p-4 rounded-premium-lg bg-white/95 dark:bg-white/5 border border-borderPink/60 dark:border-white/10 space-y-2.5 shadow-sm">
         <h4 className="text-xs font-bold text-darkText flex items-center gap-1.5">
           <Sparkles className="w-4 h-4 text-accent" />
           General Wellness Insights

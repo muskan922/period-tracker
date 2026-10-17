@@ -53,7 +53,7 @@ export const Hydration7DayChart: React.FC<Hydration7DayChartProps> = ({ symptoms
   const daysAchievedInWeek = last7DaysData.filter(d => d.waterMl >= targetMl).length;
 
   return (
-    <div className="glass-card rounded-premium-xl p-6 space-y-4 border border-borderPink/60 bg-white/90">
+    <div className="glass-card rounded-premium-xl p-6 space-y-4 border border-borderPink/60 dark:border-white/10 bg-white/90 dark:bg-[#1A1A23]/90">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 text-xs font-bold text-accent uppercase tracking-wider mb-1">
@@ -69,11 +69,11 @@ export const Hydration7DayChart: React.FC<Hydration7DayChartProps> = ({ symptoms
         </div>
 
         <div className="flex items-center gap-3 text-xs">
-          <div className="px-3 py-1.5 rounded-lg bg-secondary/70 border border-borderPink/60 text-darkText font-semibold">
+          <div className="px-3 py-1.5 rounded-lg bg-secondary/70 dark:bg-white/5 border border-borderPink/60 dark:border-white/10 text-darkText font-semibold">
             7-Day Avg: <strong>{avgL} L</strong>
           </div>
-          <div className="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-800 font-semibold flex items-center gap-1">
-            <Award className="w-3.5 h-3.5 text-emerald-600" />
+          <div className="px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800/50 text-emerald-800 dark:text-emerald-300 font-semibold flex items-center gap-1">
+            <Award className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             Goals Met: <strong>{daysAchievedInWeek} / 7 days</strong>
           </div>
         </div>
@@ -83,8 +83,8 @@ export const Hydration7DayChart: React.FC<Hydration7DayChartProps> = ({ symptoms
       <div className="h-52 w-full pt-2">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={last7DaysData} margin={{ top: 15, right: 15, left: -20, bottom: 0 }}>
-            <XAxis dataKey="day" tick={{ fontSize: 12, fill: '#2C1820' }} />
-            <YAxis tick={{ fontSize: 11, fill: '#2C1820' }} domain={[0, Math.max(3.5, targetL + 0.5)]} />
+            <XAxis dataKey="day" tick={{ fontSize: 12, fill: '#8C7A82' }} />
+            <YAxis tick={{ fontSize: 11, fill: '#8C7A82' }} domain={[0, Math.max(3.5, targetL + 0.5)]} />
             <Tooltip
               formatter={(value: any) => [`${value} Liters`, 'Water Consumed']}
               labelFormatter={(label, items) => {
@@ -93,7 +93,16 @@ export const Hydration7DayChart: React.FC<Hydration7DayChartProps> = ({ symptoms
                 }
                 return label;
               }}
-              contentStyle={{ borderRadius: '12px', fontSize: '12px', boxShadow: '0 4px 12px rgba(224, 108, 146, 0.15)', borderColor: '#F2D9E6', backgroundColor: '#FFFDF8', color: '#2C1820' }}
+              contentStyle={{
+                borderRadius: '12px',
+                fontSize: '12px',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+                borderColor: 'rgba(255, 95, 162, 0.25)',
+                backgroundColor: '#1E1A22',
+                color: '#FFF8F0'
+              }}
+              itemStyle={{ color: '#FFF8F0' }}
+              labelStyle={{ color: '#FF7597', fontWeight: 600 }}
             />
             <ReferenceLine
               y={targetL}
@@ -122,7 +131,7 @@ export const Hydration7DayChart: React.FC<Hydration7DayChartProps> = ({ symptoms
       </div>
 
       {/* Legend & Breakdown */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-borderPink/40 text-xs text-vintageText">
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-borderPink/40 dark:border-white/10 text-xs text-vintageText">
         <div className="flex items-center gap-4 font-medium">
           <span className="flex items-center gap-1">
             <span className="w-2.5 h-2.5 rounded-full bg-[#8FB996]"></span> Goal Reached (100%+)

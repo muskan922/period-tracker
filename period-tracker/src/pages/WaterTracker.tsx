@@ -162,37 +162,33 @@ export const WaterTracker: React.FC = () => {
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' });
   };
 
-  // Status badge using project theme colors:
-  // 0–39% → Low
-  // 40–69% → Moderate
-  // 70–89% → Good
-  // 90–100% → Well Hydrated
+  // Status badge using project theme colors
   const getStatusBadge = (ml: number) => {
     const pct = Math.round((ml / targetMl) * 100);
     if (pct >= 90) {
       return (
-        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1 shadow-sm">
+        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-700/50 flex items-center gap-1 shadow-sm">
           <Award className="w-3.5 h-3.5" />
           Well Hydrated ({pct}%) 🎉
         </span>
       );
     } else if (pct >= 70) {
       return (
-        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-secondary text-darkText border border-borderPink/70 flex items-center gap-1">
+        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-secondary dark:bg-cream/40 text-darkText border border-borderPink/70 dark:border-white/10 flex items-center gap-1">
           <Droplet className="w-3.5 h-3.5 text-accent" />
           Good ({pct}%) 💧
         </span>
       );
     } else if (pct >= 40) {
       return (
-        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-300 flex items-center gap-1">
+        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-300/60 dark:border-amber-700/50 flex items-center gap-1">
           <AlertCircle className="w-3.5 h-3.5" />
           Moderate ({pct}%)
         </span>
       );
     } else {
       return (
-        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-800 border border-rose-300 flex items-center gap-1">
+        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 dark:bg-rose-950/50 text-rose-800 dark:text-rose-300 border border-rose-300/60 dark:border-rose-700/50 flex items-center gap-1">
           <AlertCircle className="w-3.5 h-3.5" />
           Low ({pct}%)
         </span>
@@ -204,14 +200,8 @@ export const WaterTracker: React.FC = () => {
     <div className="space-y-8 animate-fadeIn pb-12 relative font-body">
       {/* Congratulations Celebration Modal Popup */}
       {showCongratsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#4A1D2B]/50 backdrop-blur-sm animate-fadeIn">
-          <div className="relative glass-card rounded-premium-xl max-w-md w-full p-8 text-center space-y-6 bg-gradient-to-b from-primary/30 via-secondary/20 to-cream/30 border-2 border-borderPink shadow-2xl animate-scaleUp overflow-hidden">
-            {/* Confetti decoration */}
-            <div className="absolute top-2 left-4 text-2xl animate-bounce">🎉</div>
-            <div className="absolute top-4 right-6 text-2xl animate-pulse">✨</div>
-            <div className="absolute bottom-4 left-6 text-2xl animate-bounce">💧</div>
-            <div className="absolute bottom-2 right-4 text-2xl animate-pulse">🏆</div>
-
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/80 backdrop-blur-md animate-fadeIn">
+          <div className="relative glass-card rounded-premium-xl max-w-md w-full p-8 text-center space-y-6 bg-white dark:bg-[#1A1A23] border border-borderPink dark:border-white/10 shadow-2xl animate-scaleUp overflow-hidden">
             <button
               onClick={handleDismissCongrats}
               className="absolute top-4 right-4 text-vintageText/60 hover:text-darkText transition-colors p-1"
@@ -225,7 +215,7 @@ export const WaterTracker: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300">
+              <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-700/50">
                 Goal Reached! 🌟
               </span>
               <h2 className="font-heading text-2xl font-bold text-darkText">
@@ -236,13 +226,13 @@ export const WaterTracker: React.FC = () => {
               </p>
             </div>
 
-            <div className="p-4 rounded-premium-md bg-white/90 border border-borderPink text-xs text-darkText font-medium">
+            <div className="p-4 rounded-premium-md bg-cream/60 dark:bg-cream/25 border border-borderPink/60 dark:border-white/10 text-xs text-darkText font-medium">
               💧 "Staying hydrated balances your hormone levels, improves skin texture, and prevents pre-period headaches!"
             </div>
 
             <button
               onClick={handleDismissCongrats}
-              className="w-full py-3 rounded-full bg-gradient-to-r from-primary via-accent to-rosegold text-white font-bold text-sm shadow-soft-glow hover:opacity-95 transition-all"
+              className="w-full py-3 rounded-full bg-gradient-to-r from-primary via-accent to-rosegold text-white font-bold text-sm shadow-soft-glow hover:opacity-95 transition-all cursor-pointer"
             >
               Awesome! Continue Tracking 💧
             </button>
@@ -251,12 +241,12 @@ export const WaterTracker: React.FC = () => {
       )}
 
       {/* Header Banner */}
-      <div className="relative glass-card rounded-premium-xl p-8 overflow-hidden bg-gradient-to-r from-primary/30 via-secondary/50 to-primary/20 border border-borderPink/60">
+      <div className="relative glass-card rounded-premium-xl p-8 overflow-hidden bg-gradient-to-r from-primary/30 via-secondary/50 to-primary/20 dark:from-primary/10 dark:via-cream/20 dark:to-primary/10 border border-borderPink/60 dark:border-white/10">
         <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
           <GlassWater className="w-48 h-48 text-accent" />
         </div>
         <div className="relative z-10 max-w-2xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/40 text-darkText border border-borderPink/60 text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/40 dark:bg-cream/40 text-darkText border border-borderPink/60 dark:border-white/10 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5 text-accent" />
             Hydration & Cycle Wellness Tracker
           </div>
@@ -272,7 +262,7 @@ export const WaterTracker: React.FC = () => {
       {/* 30-Day Summary Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {/* Target Card */}
-        <div className="glass-card rounded-premium-lg p-6 flex items-center justify-between relative border border-borderPink/60 bg-white/90">
+        <div className="glass-card rounded-premium-lg p-6 flex items-center justify-between relative border border-borderPink/60 dark:border-white/10 bg-white/90 dark:bg-[#1A1A23]/90">
           <div className="space-y-1">
             <p className="text-xs font-semibold text-vintageText/80 uppercase tracking-wider">Daily Target</p>
             {hasUserChosenTarget ? (
@@ -284,16 +274,16 @@ export const WaterTracker: React.FC = () => {
               </>
             ) : (
               <>
-                <p className="font-heading text-xl font-bold text-amber-700">
+                <p className="font-heading text-xl font-bold text-amber-700 dark:text-amber-300">
                   Not Set Yet 🎯
                 </p>
-                <p className="text-xs text-amber-700">Choose your target below</p>
+                <p className="text-xs text-amber-700 dark:text-amber-300">Choose your target below</p>
               </>
             )}
           </div>
           <button
             onClick={() => setIsEditingTarget(!isEditingTarget)}
-            className="px-3 py-1.5 rounded-full bg-primary/40 text-darkText hover:bg-primary/70 transition-all text-xs font-semibold flex items-center gap-1.5 border border-borderPink/60"
+            className="px-3 py-1.5 rounded-full bg-primary/40 dark:bg-cream/40 text-darkText hover:bg-primary/70 transition-all text-xs font-semibold flex items-center gap-1.5 border border-borderPink/60 dark:border-white/10 cursor-pointer"
           >
             <Target className="w-4 h-4 text-accent" />
             <span>{isEditingTarget ? 'Close' : 'Choose Target'}</span>
@@ -301,7 +291,7 @@ export const WaterTracker: React.FC = () => {
         </div>
 
         {/* 1 Month Total Consumed */}
-        <div className="glass-card rounded-premium-lg p-6 flex items-center justify-between border border-borderPink/60 bg-white/90">
+        <div className="glass-card rounded-premium-lg p-6 flex items-center justify-between border border-borderPink/60 dark:border-white/10 bg-white/90 dark:bg-[#1A1A23]/90">
           <div className="space-y-1">
             <p className="text-xs font-semibold text-vintageText/80 uppercase tracking-wider">1 Month Total</p>
             <p className="font-heading text-2.5xl font-bold text-rosegold">
@@ -309,13 +299,13 @@ export const WaterTracker: React.FC = () => {
             </p>
             <p className="text-xs text-vintageText">Total logged over 30 days</p>
           </div>
-          <div className="w-11 h-11 rounded-2xl bg-secondary flex items-center justify-center text-rosegold border border-borderPink/40">
+          <div className="w-11 h-11 rounded-2xl bg-secondary dark:bg-cream/40 flex items-center justify-center text-rosegold border border-borderPink/40 dark:border-white/10">
             <GlassWater className="w-5 h-5" />
           </div>
         </div>
 
         {/* 30-Day Avg Intake Card */}
-        <div className="glass-card rounded-premium-lg p-6 flex items-center justify-between border border-borderPink/60 bg-white/90">
+        <div className="glass-card rounded-premium-lg p-6 flex items-center justify-between border border-borderPink/60 dark:border-white/10 bg-white/90 dark:bg-[#1A1A23]/90">
           <div className="space-y-1">
             <p className="text-xs font-semibold text-vintageText/80 uppercase tracking-wider">Monthly Avg</p>
             <p className="font-heading text-2.5xl font-bold text-accent">
@@ -323,13 +313,13 @@ export const WaterTracker: React.FC = () => {
             </p>
             <p className="text-xs text-vintageText">Average daily consumption</p>
           </div>
-          <div className="w-11 h-11 rounded-2xl bg-primary/30 flex items-center justify-center text-accent border border-borderPink/40">
+          <div className="w-11 h-11 rounded-2xl bg-primary/30 dark:bg-cream/40 flex items-center justify-center text-accent border border-borderPink/40 dark:border-white/10">
             <TrendingUp className="w-5 h-5" />
           </div>
         </div>
 
         {/* Hydration Streak Card */}
-        <div className="glass-card rounded-premium-lg p-6 flex items-center justify-between border border-borderPink/60 bg-white/90">
+        <div className="glass-card rounded-premium-lg p-6 flex items-center justify-between border border-borderPink/60 dark:border-white/10 bg-white/90 dark:bg-[#1A1A23]/90">
           <div className="space-y-1">
             <p className="text-xs font-semibold text-vintageText/80 uppercase tracking-wider">Hydration Streak</p>
             <p className="font-heading text-2.5xl font-bold text-rose-500 flex items-center gap-1.5">
@@ -338,7 +328,7 @@ export const WaterTracker: React.FC = () => {
             </p>
             <p className="text-xs text-vintageText">{daysAchievedInMonth} days achieved this month</p>
           </div>
-          <div className="w-11 h-11 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-500 border border-rose-200/40">
+          <div className="w-11 h-11 rounded-2xl bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center text-rose-500 border border-rose-200/40 dark:border-rose-800/40">
             <Award className="w-5 h-5" />
           </div>
         </div>
@@ -368,9 +358,9 @@ export const WaterTracker: React.FC = () => {
               <button
                 key={val}
                 onClick={() => handleSaveTarget(val)}
-                className={`py-3 px-3 rounded-premium-md text-xs font-bold border transition-all flex flex-col items-center justify-center gap-1 ${Math.abs(val - parseFloat(targetLiters)) < 0.05
+                className={`py-3 px-3 rounded-premium-md text-xs font-bold border transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${Math.abs(val - parseFloat(targetLiters)) < 0.05
                     ? 'bg-accent text-white border-accent shadow-md ring-2 ring-primary'
-                    : 'bg-white text-darkText border-borderPink/60 hover:border-accent hover:bg-primary/20'
+                    : 'bg-white dark:bg-cream/40 text-darkText border-borderPink/60 dark:border-white/10 hover:border-accent hover:bg-primary/20'
                   }`}
               >
                 <span>{val.toFixed(1)} L</span>
@@ -389,12 +379,12 @@ export const WaterTracker: React.FC = () => {
               placeholder="e.g. 2.8"
               value={customTargetInput}
               onChange={e => setCustomTargetInput(e.target.value)}
-              className="w-32 px-3 py-2 rounded-lg border border-borderPink/60 text-sm bg-white text-darkText focus:ring-2 focus:ring-accent"
+              className="w-32 px-3 py-2 rounded-lg border border-borderPink/60 dark:border-white/10 text-sm bg-white dark:bg-[#14141C] text-darkText focus:ring-2 focus:ring-accent"
             />
             <span className="text-xs font-semibold text-vintageText">Liters</span>
             <button
               type="submit"
-              className="px-4 py-2 bg-accent text-white rounded-lg text-xs font-semibold hover:bg-rose-500 transition-colors"
+              className="px-4 py-2 bg-accent text-white rounded-lg text-xs font-semibold hover:bg-rose-500 transition-colors cursor-pointer"
             >
               Save Target
             </button>
@@ -405,9 +395,9 @@ export const WaterTracker: React.FC = () => {
       {/* Main Interactive Tracker: Date Selector + Dynamic Tumbler */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Left Col: Water Logger & Dynamic Tumbler */}
-        <div className="md:col-span-7 glass-card rounded-premium-xl p-6 space-y-6 flex flex-col justify-between border border-borderPink/60 bg-white/90">
+        <div className="md:col-span-7 glass-card rounded-premium-xl p-6 space-y-6 flex flex-col justify-between border border-borderPink/60 dark:border-white/10 bg-white/90 dark:bg-[#1A1A23]/90">
           {/* Date Selector Header */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-borderPink/50">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-borderPink/50 dark:border-white/10">
             <div>
               <span className="text-xs font-bold text-accent uppercase tracking-wider">Date-wise Logging</span>
               <h2 className="font-heading text-xl font-bold text-darkText flex items-center gap-2 mt-0.5">
@@ -420,9 +410,9 @@ export const WaterTracker: React.FC = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setSelectedDate(getTodayString())}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${selectedDate === getTodayString()
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${selectedDate === getTodayString()
                     ? 'bg-accent text-white shadow-soft-glow'
-                    : 'bg-secondary/60 text-vintageText hover:bg-secondary'
+                    : 'bg-secondary/60 dark:bg-cream/40 text-vintageText hover:bg-secondary'
                   }`}
               >
                 Today
@@ -431,7 +421,7 @@ export const WaterTracker: React.FC = () => {
                 type="date"
                 value={selectedDate}
                 onChange={e => setSelectedDate(e.target.value)}
-                className="px-3 py-1 rounded-full text-xs font-semibold bg-white border border-borderPink/60 text-darkText cursor-pointer"
+                className="px-3 py-1 rounded-full text-xs font-semibold bg-white dark:bg-[#14141C] border border-borderPink/60 dark:border-white/10 text-darkText cursor-pointer"
               />
             </div>
           </div>
@@ -440,7 +430,7 @@ export const WaterTracker: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center py-2">
             {/* Vintage Glass Tumbler Graphic */}
             <div className="flex flex-col items-center justify-center space-y-3">
-              <div className="relative w-36 h-52 border-2 border-slate-300/80 dark:border-white/90 bg-slate-100/60 dark:bg-white/10 rounded-b-3xl shadow-luxury overflow-hidden flex flex-col justify-end">
+              <div className="relative w-36 h-52 border-2 border-slate-300/80 dark:border-white/30 bg-slate-100/60 dark:bg-white/5 rounded-b-3xl shadow-luxury overflow-hidden flex flex-col justify-end">
                 {/* Highlight glass reflection */}
                 <div className="absolute top-0 left-2 w-2 h-full bg-white/30 rounded-full pointer-events-none" />
                 <div className="absolute top-0 right-2 w-1.5 h-full bg-white/20 rounded-full pointer-events-none" />
@@ -494,7 +484,7 @@ export const WaterTracker: React.FC = () => {
               <div className="grid grid-cols-2 gap-2.5">
                 <button
                   onClick={() => handleAddWater(250)}
-                  className="p-3 rounded-premium-md border border-borderPink/60 bg-secondary/40 hover:bg-primary/40 transition-all text-left group"
+                  className="p-3 rounded-premium-md border border-borderPink/60 dark:border-white/10 bg-secondary/40 dark:bg-cream/40 hover:bg-primary/40 dark:hover:bg-primary/20 transition-all text-left group cursor-pointer"
                 >
                   <span className="text-xs font-bold text-darkText block">+0.25 L</span>
                   <span className="text-[11px] text-vintageText flex items-center gap-1 mt-0.5">
@@ -504,7 +494,7 @@ export const WaterTracker: React.FC = () => {
 
                 <button
                   onClick={() => handleAddWater(500)}
-                  className="p-3 rounded-premium-md border border-borderPink/60 bg-secondary/40 hover:bg-primary/40 transition-all text-left group"
+                  className="p-3 rounded-premium-md border border-borderPink/60 dark:border-white/10 bg-secondary/40 dark:bg-cream/40 hover:bg-primary/40 dark:hover:bg-primary/20 transition-all text-left group cursor-pointer"
                 >
                   <span className="text-xs font-bold text-darkText block">+0.50 L</span>
                   <span className="text-[11px] text-vintageText flex items-center gap-1 mt-0.5">
@@ -514,7 +504,7 @@ export const WaterTracker: React.FC = () => {
 
                 <button
                   onClick={() => handleAddWater(750)}
-                  className="p-3 rounded-premium-md border border-borderPink/60 bg-secondary/40 hover:bg-primary/40 transition-all text-left group"
+                  className="p-3 rounded-premium-md border border-borderPink/60 dark:border-white/10 bg-secondary/40 dark:bg-cream/40 hover:bg-primary/40 dark:hover:bg-primary/20 transition-all text-left group cursor-pointer"
                 >
                   <span className="text-xs font-bold text-darkText block">+0.75 L</span>
                   <span className="text-[11px] text-vintageText flex items-center gap-1 mt-0.5">
@@ -524,7 +514,7 @@ export const WaterTracker: React.FC = () => {
 
                 <button
                   onClick={() => handleAddWater(1000)}
-                  className="p-3 rounded-premium-md border border-borderPink/60 bg-secondary/40 hover:bg-primary/40 transition-all text-left group"
+                  className="p-3 rounded-premium-md border border-borderPink/60 dark:border-white/10 bg-secondary/40 dark:bg-cream/40 hover:bg-primary/40 dark:hover:bg-primary/20 transition-all text-left group cursor-pointer"
                 >
                   <span className="text-xs font-bold text-darkText block">+1.00 L</span>
                   <span className="text-[11px] text-vintageText flex items-center gap-1 mt-0.5">
@@ -536,7 +526,7 @@ export const WaterTracker: React.FC = () => {
               {/* Subtract Button */}
               <button
                 onClick={() => handleAddWater(-250)}
-                className="w-full py-2 rounded-lg border border-rose-200 bg-rose-50/50 text-rose-700 text-xs font-medium hover:bg-rose-100/60 transition-colors flex items-center justify-center gap-1"
+                className="w-full py-2 rounded-lg border border-rose-200 dark:border-rose-900/50 bg-rose-50/50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 text-xs font-medium hover:bg-rose-100/60 dark:hover:bg-rose-950/50 transition-colors flex items-center justify-center gap-1 cursor-pointer"
               >
                 <Minus className="w-3.5 h-3.5" />
                 <span>Subtract 0.25 L (250 ml)</span>
@@ -552,11 +542,11 @@ export const WaterTracker: React.FC = () => {
                   placeholder="Custom Liters"
                   value={customAmountInput}
                   onChange={e => setCustomAmountInput(e.target.value)}
-                  className="flex-1 px-3 py-2 rounded-lg border border-borderPink/60 text-xs bg-white text-darkText focus:ring-2 focus:ring-accent"
+                  className="flex-1 px-3 py-2 rounded-lg border border-borderPink/60 dark:border-white/10 text-xs bg-white dark:bg-[#14141C] text-darkText focus:ring-2 focus:ring-accent"
                 />
                 <button
                   type="submit"
-                  className="px-3.5 py-2 bg-accent text-white rounded-lg text-xs font-semibold hover:opacity-90 transition-colors"
+                  className="px-3.5 py-2 bg-accent text-white rounded-lg text-xs font-semibold hover:opacity-90 transition-colors cursor-pointer"
                 >
                   Update Log
                 </button>
@@ -566,7 +556,7 @@ export const WaterTracker: React.FC = () => {
         </div>
 
         {/* Right Col: Daily Summary Card & Smart Reminders */}
-        <div className="md:col-span-5 glass-card rounded-premium-xl p-6 space-y-5 flex flex-col justify-between border border-borderPink/60 bg-white/90">
+        <div className="md:col-span-5 glass-card rounded-premium-xl p-6 space-y-5 flex flex-col justify-between border border-borderPink/60 dark:border-white/10 bg-white/90 dark:bg-[#1A1A23]/90">
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="font-heading text-lg font-bold text-darkText flex items-center gap-2">
@@ -576,7 +566,7 @@ export const WaterTracker: React.FC = () => {
               {rawProgressPercent >= 100 && (
                 <button
                   onClick={() => setShowCongratsModal(true)}
-                  className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-300 text-[#4B3B45] flex items-center gap-1 shadow-sm hover:scale-105 transition-transform"
+                  className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-300 dark:bg-amber-400 text-[#4B3B45] flex items-center gap-1 shadow-sm hover:scale-105 transition-transform"
                 >
                   🎉 View Celebration
                 </button>
@@ -584,7 +574,7 @@ export const WaterTracker: React.FC = () => {
             </div>
 
             {/* Daily Summary Box */}
-            <div className="p-4 rounded-premium-md bg-secondary/40 border border-borderPink/60 space-y-3">
+            <div className="p-4 rounded-premium-md bg-secondary/40 dark:bg-white/5 border border-borderPink/60 dark:border-white/10 space-y-3">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-vintageText font-semibold">Today's Intake:</span>
                 <span className="font-bold text-accent">{currentWaterLiters} L ({currentWaterMl} ml)</span>
@@ -597,17 +587,17 @@ export const WaterTracker: React.FC = () => {
 
               <div className="flex items-center justify-between text-xs">
                 <span className="text-vintageText font-semibold">Remaining Amount:</span>
-                <span className="font-bold text-emerald-700">
+                <span className="font-bold text-emerald-700 dark:text-emerald-400">
                   {remainingMl === 0 ? 'Goal Reached! 🎉' : `${remainingLiters} L (${remainingMl} ml)`}
                 </span>
               </div>
 
-              <div className="space-y-1 pt-1 border-t border-borderPink/40">
+              <div className="space-y-1 pt-1 border-t border-borderPink/40 dark:border-white/10">
                 <div className="flex justify-between text-[11px] font-semibold text-vintageText">
                   <span>Hydration Score: {progressPercent}%</span>
                   <span>{getStatusBadge(currentWaterMl)}</span>
                 </div>
-                <div className="w-full h-2.5 bg-[#FDECEF] rounded-full overflow-hidden">
+                <div className="w-full h-2.5 bg-[#FDECEF] dark:bg-white/10 rounded-full overflow-hidden">
                   <div
                     style={{ width: `${progressPercent}%` }}
                     className="h-full bg-gradient-to-r from-accent via-primary to-emerald-400 transition-all duration-500 rounded-full"
@@ -621,8 +611,8 @@ export const WaterTracker: React.FC = () => {
           </div>
 
           {/* Hydration Streak Banner */}
-          <div className="p-4 rounded-premium-md bg-[#FFFDF8] border border-borderPink/60 shadow-sm text-xs text-darkText space-y-1">
-            <p className="font-semibold text-rose-500 flex items-center gap-1.5">
+          <div className="p-4 rounded-premium-md bg-[#FFFDF8] dark:bg-white/5 border border-borderPink/60 dark:border-white/10 shadow-sm text-xs text-darkText space-y-1">
+            <p className="font-semibold text-rose-500 dark:text-rose-400 flex items-center gap-1.5">
               <span>🔥 Hydration Streak</span>
             </p>
             <p className="text-vintageText italic">
@@ -639,7 +629,7 @@ export const WaterTracker: React.FC = () => {
       <MenstrualHydrationInsights selectedDate={selectedDate} />
 
       {/* 1 Month (30 Days) Date-wise Water Status Report Table */}
-      <div className="glass-card rounded-premium-xl p-6 space-y-6 border border-borderPink/60 bg-white/90">
+      <div className="glass-card rounded-premium-xl p-6 space-y-6 border border-borderPink/60 dark:border-white/10 bg-white/90 dark:bg-[#1A1A23]/90">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="font-heading text-xl font-bold text-darkText flex items-center gap-2">
@@ -652,7 +642,7 @@ export const WaterTracker: React.FC = () => {
           </div>
 
           {/* History Filters */}
-          <div className="flex items-center gap-2 bg-secondary/40 p-1 rounded-full text-xs font-semibold">
+          <div className="flex items-center gap-2 bg-secondary/40 dark:bg-white/5 p-1 rounded-full text-xs font-semibold border border-transparent dark:border-white/10">
             <button
               onClick={() => setHistoryFilter('30days')}
               className={`px-3 py-1.5 rounded-full transition-all ${historyFilter === '30days'
@@ -686,7 +676,7 @@ export const WaterTracker: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-borderPink/60 text-xs font-bold text-vintageText uppercase tracking-wider bg-secondary/20">
+              <tr className="border-b border-borderPink/60 dark:border-white/10 text-xs font-bold text-vintageText uppercase tracking-wider bg-secondary/20 dark:bg-white/5">
                 <th className="py-3 px-4">Date</th>
                 <th className="py-3 px-4">Liters Consumed</th>
                 <th className="py-3 px-4">Target Progress</th>
@@ -694,14 +684,14 @@ export const WaterTracker: React.FC = () => {
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-borderPink/40 text-sm">
+            <tbody className="divide-y divide-borderPink/40 dark:divide-white/10 text-sm">
               {paginatedTableLogs.map(log => {
                 const liters = (log.waterIntake / 1000).toFixed(2);
                 const pct = Math.min(100, Math.round((log.waterIntake / targetMl) * 100));
                 const isEditingThisRow = editingRowDate === log.date;
 
                 return (
-                  <tr key={log.date} className="hover:bg-secondary/20 transition-colors">
+                  <tr key={log.date} className="hover:bg-secondary/20 dark:hover:bg-white/5 transition-colors">
                     {/* Date */}
                     <td className="py-3.5 px-4 font-semibold text-darkText">
                       <div className="flex items-center gap-2">
@@ -723,12 +713,12 @@ export const WaterTracker: React.FC = () => {
                             min="0"
                             value={editingRowAmount}
                             onChange={e => setEditingRowAmount(e.target.value)}
-                            className="w-24 px-2 py-1 border border-borderPink rounded text-xs bg-white text-darkText"
+                            className="w-24 px-2 py-1 border border-borderPink dark:border-white/15 rounded text-xs bg-white dark:bg-[#14141C] text-darkText"
                           />
                           <span className="text-xs">L</span>
                           <button
                             onClick={() => handleSaveRowAmount(log.date)}
-                            className="p-1 text-emerald-600 hover:bg-emerald-50 rounded"
+                            className="p-1 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 rounded"
                             title="Save"
                           >
                             <Check className="w-4 h-4" />
@@ -749,7 +739,7 @@ export const WaterTracker: React.FC = () => {
                           <span>{pct}%</span>
                           <span>Goal: {targetLiters} L</span>
                         </div>
-                        <div className="w-full h-2.5 bg-[#FDECEF] rounded-full overflow-hidden">
+                        <div className="w-full h-2.5 bg-[#FDECEF] dark:bg-white/10 rounded-full overflow-hidden">
                           <div
                             style={{ width: `${pct}%` }}
                             className={`h-full rounded-full transition-all duration-500 ${pct >= 90
@@ -778,7 +768,7 @@ export const WaterTracker: React.FC = () => {
                             setSelectedDate(log.date);
                             window.scrollTo({ top: 200, behavior: 'smooth' });
                           }}
-                          className="px-2.5 py-1 text-xs font-semibold rounded-md bg-secondary text-darkText border border-borderPink/60 hover:bg-primary/40 transition-colors"
+                          className="px-2.5 py-1 text-xs font-semibold rounded-md bg-secondary dark:bg-white/10 text-darkText border border-borderPink/60 dark:border-white/10 hover:bg-primary/40 dark:hover:bg-white/15 transition-colors"
                         >
                           Select & View
                         </button>
@@ -787,7 +777,7 @@ export const WaterTracker: React.FC = () => {
                             setEditingRowDate(log.date);
                             setEditingRowAmount(liters);
                           }}
-                          className="p-1.5 text-vintageText hover:text-darkText rounded-md hover:bg-secondary/40"
+                          className="p-1.5 text-vintageText hover:text-darkText rounded-md hover:bg-secondary/40 dark:hover:bg-white/10"
                           title="Quick Edit Liters"
                         >
                           <Edit3 className="w-4 h-4" />
@@ -802,19 +792,19 @@ export const WaterTracker: React.FC = () => {
         </div>
 
         {/* Pagination Footer */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-borderPink/40">
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-borderPink/40 dark:border-white/10">
           <div className="flex items-center gap-3 text-xs text-vintageText font-medium">
             <span>
               Showing <strong className="text-darkText">{filteredTableLogs.length > 0 ? startIndex + 1 : 0}</strong> to{' '}
               <strong className="text-darkText">{endIndex}</strong> of{' '}
               <strong className="text-darkText">{filteredTableLogs.length}</strong> entries
             </span>
-            <div className="flex items-center gap-1.5 pl-2 border-l border-borderPink/40">
+            <div className="flex items-center gap-1.5 pl-2 border-l border-borderPink/40 dark:border-white/10">
               <span>Show:</span>
               <select
                 value={itemsPerPage}
                 onChange={e => setItemsPerPage(Number(e.target.value))}
-                className="px-2 py-1 rounded border border-borderPink/60 bg-white text-darkText font-semibold text-xs cursor-pointer"
+                className="px-2 py-1 rounded border border-borderPink/60 dark:border-white/15 bg-white dark:bg-[#14141C] text-darkText font-semibold text-xs cursor-pointer"
               >
                 <option value={5}>5 per page</option>
                 <option value={7}>7 per page</option>
@@ -828,7 +818,7 @@ export const WaterTracker: React.FC = () => {
             <button
               onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
-              className="p-1.5 rounded-lg border border-borderPink/60 text-xs font-semibold text-vintageText hover:text-darkText hover:bg-secondary/40 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all"
+              className="p-1.5 rounded-lg border border-borderPink/60 dark:border-white/15 text-xs font-semibold text-vintageText hover:text-darkText hover:bg-secondary/40 dark:hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all"
             >
               <ChevronLeft className="w-4 h-4" />
               <span>Prev</span>
@@ -841,7 +831,7 @@ export const WaterTracker: React.FC = () => {
                   onClick={() => setCurrentPage(page)}
                   className={`w-7 h-7 rounded-lg text-xs font-bold transition-all ${currentPage === page
                       ? 'bg-accent text-white shadow-sm'
-                      : 'text-vintageText hover:bg-secondary/40 hover:text-darkText'
+                      : 'text-vintageText hover:bg-secondary/40 dark:hover:bg-white/10 hover:text-darkText'
                     }`}
                 >
                   {page}
@@ -852,7 +842,7 @@ export const WaterTracker: React.FC = () => {
             <button
               onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
               disabled={currentPage === totalPages}
-              className="p-1.5 rounded-lg border border-borderPink/60 text-xs font-semibold text-vintageText hover:text-darkText hover:bg-secondary/40 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all"
+              className="p-1.5 rounded-lg border border-borderPink/60 dark:border-white/15 text-xs font-semibold text-vintageText hover:text-darkText hover:bg-secondary/40 dark:hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all"
             >
               <span>Next</span>
               <ChevronRight className="w-4 h-4" />
