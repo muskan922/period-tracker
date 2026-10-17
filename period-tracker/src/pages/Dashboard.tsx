@@ -218,15 +218,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             <div className="absolute flex flex-col items-center justify-center text-center">
               <span className="text-[9px] font-bold text-accent uppercase tracking-widest font-subtitle">Period In</span>
               <span className="font-heading text-4xl text-darkText my-0.5">{daysRemaining}</span>
-              <span className="text-[9px] text-vintageText/60 font-body">Days</span>
             </div>
-
-            {/* Wreath Floral Overlay Accents */}
-            <div className="absolute top-1.5 left-2.5 text-[9px] select-none pointer-events-none opacity-85">🌿</div>
-            <div className="absolute top-3.5 right-4.5 text-[9px] select-none pointer-events-none opacity-85">🌸</div>
-            <div className="absolute bottom-1.5 right-3 text-[9px] select-none pointer-events-none opacity-85">🌿</div>
-            <div className="absolute bottom-3 left-4 text-[9px] select-none pointer-events-none opacity-85">🌸</div>
-            <div className="absolute top-1/2 -right-1.5 text-[9px] select-none pointer-events-none opacity-85">🦋</div>
           </div>
 
           <div className="text-xs text-vintageText/75 leading-relaxed font-body">
@@ -237,10 +229,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
         {/* Column 2: Today's Mood Log */}
         <div className="md:col-span-5 glass-card rounded-premium-lg p-6 flex flex-col justify-between space-y-4 relative">
-          {/* Paperclip header decoration */}
-          <div className="absolute top-2 left-6 text-xl rotate-[-12deg] opacity-80 select-none pointer-events-none">📎</div>
-
-          <div className="flex justify-between items-center pl-4 mt-1">
+          <div className="flex justify-between items-center mt-1">
             <h3 className="font-heading text-base font-semibold text-darkText">Today's Mood</h3>
             <span className="text-[9px] uppercase font-bold text-accent tracking-wider font-subtitle">Daily Sanctorium</span>
           </div>
@@ -278,15 +267,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
         {/* Column 3: AI Daily Insights capsule */}
         <div className="md:col-span-3 glass-card rounded-premium-lg p-6 bg-gradient-to-br from-cream to-primary/10 border border-accent/25 flex flex-col justify-between relative overflow-visible">
-          {/* Pink Push-Pin header decoration */}
-          <div className="absolute top-2 left-6 text-xl rotate-12 opacity-90 select-none pointer-events-none">📌</div>
-
-          {/* Butterfly flying near the corner */}
-          <div className="absolute -top-3.5 -right-2 text-xl select-none pointer-events-none animate-float z-20">🦋</div>
-
-          {/* Pressed flower branch watermark */}
-          <div className="absolute bottom-8 right-2 text-4xl opacity-35 select-none pointer-events-none">🌿🌸</div>
-
           <div className="space-y-3 pt-2">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent/20 border border-accent/30 text-[9px] font-bold tracking-widest text-accent uppercase font-subtitle">
               <Sparkles className="w-3 h-3 text-accent animate-pulse" />
@@ -321,12 +301,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
         {/* Column 1: Water Intake */}
         <div className="md:col-span-4 glass-card rounded-premium-lg p-6 flex flex-col justify-between space-y-4 relative overflow-visible">
-          {/* Pink Push-Pin header decoration */}
-          <div className="absolute top-2 left-6 text-xl rotate-[-6deg] opacity-90 select-none pointer-events-none">📌</div>
-
           <div
             onClick={() => handleNav('water')}
-            className="flex justify-between items-center pl-4 mt-1 cursor-pointer group"
+            className="flex justify-between items-center mt-1 cursor-pointer group"
           >
             <h3 className="font-heading text-lg font-semibold text-darkText flex items-center gap-2 group-hover:text-sky-600 transition-colors">
               <Droplet className="w-5 h-5 text-sky-400" />
@@ -341,14 +318,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
           {/* Transparent Vintage Glass Tumbler */}
           <div className="flex justify-center py-2 relative">
-            {/* Hydration Tracker Decoration */}
-            <div className="absolute bottom-1 right-2 text-xl pointer-events-none select-none animate-float">
-              🦆
-            </div>
-
             {/* Pinned Handwritten label */}
-            <div className="absolute right-[-4px] top-1/2 -translate-y-1/2 w-28 p-2.5 bg-[#FFFDF8] border border-amber-900/15 shadow-premium rotate-3 font-subtitle text-[12px] text-[#4B3B45]/90 leading-relaxed rounded-sm select-none pointer-events-none z-10">
-              <div className="absolute -top-2 left-1/2 -translate-x-1/2 text-xs">📌</div>
+            <div className="absolute right-[-4px] top-1/2 -translate-y-1/2 w-28 p-2.5 bg-[#FFFDF8] dark:bg-[#1A1A23] border border-amber-900/15 dark:border-white/10 shadow-premium rotate-3 font-subtitle text-[12px] text-[#4B3B45]/90 dark:text-vintageText leading-relaxed rounded-sm select-none pointer-events-none z-10">
+              <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-rosegold/70 shadow-xs" />
               "A little water, a lot of love for your body ♡"
             </div>
 
@@ -416,10 +388,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
         {/* Column 2: Sleep hours */}
         <div className="md:col-span-4 glass-card rounded-premium-lg p-6 flex flex-col justify-between space-y-4 relative overflow-visible">
-          {/* Pink Push-Pin header decoration */}
-          <div className="absolute top-2 left-6 text-xl rotate-12 opacity-90 select-none pointer-events-none">📌</div>
-
-          <div className="flex justify-between items-center pl-4 mt-1">
+          <div className="flex justify-between items-center mt-1">
             <h3 className="font-heading text-base font-semibold text-darkText flex items-center gap-2">
               <Moon className="w-5 h-5 text-pink-400" />
               Sleep Tracker
@@ -427,15 +396,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             <span className="text-xs font-semibold text-pink-600">{todaySymptom.sleepHours} hrs</span>
           </div>
 
-          {/* Sleeping Teddy Bear on Cloud Illustration */}
+          {/* Clean Serene Sleep Badge & Stepper */}
           <div className="flex items-center justify-center gap-4 py-1 relative">
-            {/* Hanging stars */}
-            <div className="absolute top-0 right-2 text-xs select-none pointer-events-none animate-float opacity-75">✨⭐</div>
-
-            <div className="relative w-16 h-16 shrink-0 flex items-center justify-center select-none pointer-events-none text-center">
-              <span className="text-4xl">☁️</span>
-              <span className="text-2xl absolute -top-1">🌛</span>
-              <span className="text-xxs absolute -bottom-1 right-2 animate-bounce">⭐</span>
+            <div className="w-16 h-16 shrink-0 rounded-full bg-gradient-to-tr from-pink-400/20 via-primary/30 to-cream dark:from-pink-950/40 dark:via-cream/20 dark:to-[#1A1A23] border border-borderPink/60 flex items-center justify-center relative shadow-inner">
+              <Moon className="w-8 h-8 text-pink-400" />
+              <Sparkles className="w-4 h-4 text-accent absolute -top-1 -right-1" />
             </div>
 
             <div className="flex items-center gap-2">
@@ -460,14 +425,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
         {/* Column 3: Energy Forecast Chart */}
         <div className="md:col-span-4 glass-card rounded-premium-lg p-6 flex flex-col justify-between space-y-2 relative overflow-visible">
-          {/* Pink Push-Pin header decoration */}
-          <div className="absolute top-2 left-6 text-xl rotate-[-8deg] opacity-90 select-none pointer-events-none">📌</div>
-
-          {/* Pressed flower bouquet in corners */}
-          <div className="absolute bottom-8 left-2 text-xxs select-none pointer-events-none opacity-45">🌸🌿</div>
-          <div className="absolute bottom-8 right-2 text-xxs select-none pointer-events-none opacity-45">🌿🌸</div>
-
-          <div className="flex justify-between items-center pl-4 mt-1">
+          <div className="flex justify-between items-center mt-1">
             <h3 className="font-heading text-base font-semibold text-darkText flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-accent" />
               Energy & Libido Waves
