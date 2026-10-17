@@ -1,30 +1,45 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, Outlet } from 'react-router-dom';
 import { AppProvider, useApp } from './context/AppContext';
 import { Layout } from './components/Layout';
-import { LandingPage } from './pages/LandingPage';
-import { Auth } from './pages/Auth';
-import { Dashboard } from './pages/Dashboard';
-import { PeriodTracker } from './pages/PeriodTracker';
-import { WaterTracker } from './pages/WaterTracker';
-import { CustomCalendar } from './components/CustomCalendar';
-import { AIPredictions } from './pages/AIPredictions';
-import { MoodTracker } from './pages/MoodTracker';
-import { SymptomTracker } from './pages/SymptomTracker';
-import { MedicationPage } from './pages/Medication';
-import { Appointments } from './pages/Appointments';
-import { Community } from './pages/Community';
-import { Reports } from './pages/Reports';
-import { Profile } from './pages/Profile';
-import { SettingsPage } from './pages/Settings';
-import { AIAssistant } from './pages/AIAssistant';
+
+// Lazy-loaded route components for performance optimization and bundle splitting
+const LandingPage = lazy(() => import('./pages/LandingPage').then(m => ({ default: m.LandingPage })));
+const Auth = lazy(() => import('./pages/Auth').then(m => ({ default: m.Auth })));
+const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
+const PeriodTracker = lazy(() => import('./pages/PeriodTracker').then(m => ({ default: m.PeriodTracker })));
+const WaterTracker = lazy(() => import('./pages/WaterTracker').then(m => ({ default: m.WaterTracker })));
+const CustomCalendar = lazy(() => import('./components/CustomCalendar').then(m => ({ default: m.CustomCalendar })));
+const AIPredictions = lazy(() => import('./pages/AIPredictions').then(m => ({ default: m.AIPredictions })));
+const AIAssistant = lazy(() => import('./pages/AIAssistant').then(m => ({ default: m.AIAssistant })));
+const MoodTracker = lazy(() => import('./pages/MoodTracker').then(m => ({ default: m.MoodTracker })));
+const SymptomTracker = lazy(() => import('./pages/SymptomTracker').then(m => ({ default: m.SymptomTracker })));
+const MedicationPage = lazy(() => import('./pages/Medication').then(m => ({ default: m.MedicationPage })));
+const Appointments = lazy(() => import('./pages/Appointments').then(m => ({ default: m.Appointments })));
+const Community = lazy(() => import('./pages/Community').then(m => ({ default: m.Community })));
+const Reports = lazy(() => import('./pages/Reports').then(m => ({ default: m.Reports })));
+const Profile = lazy(() => import('./pages/Profile').then(m => ({ default: m.Profile })));
+const SettingsPage = lazy(() => import('./pages/Settings').then(m => ({ default: m.SettingsPage })));
+
+const PageLoader: React.FC = () => (
+  <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3 text-accent animate-fade-in p-8">
+    <div className="w-9 h-9 rounded-full border-2 border-accent/20 border-t-accent animate-spin" />
+    <span className="font-subtitle text-xs text-vintageText/70 tracking-widest uppercase">Opening Sanctuary Chamber...</span>
+  </div>
+);
 
 const ProtectedLayout: React.FC = () => {
   const { isLoggedIn } = useApp();
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
-  return <Layout />;
+  return (
+    <Layout>
+      <Suspense fallback={<PageLoader />}>
+        <Outlet />
+      </Suspense>
+    </Layout>
+  );
 };
 
 const PublicHome: React.FC = () => {
@@ -33,7 +48,11 @@ const PublicHome: React.FC = () => {
   if (isLoggedIn) {
     return <Navigate to="/dashboard" replace />;
   }
-  return <LandingPage onStart={() => navigate('/login')} />;
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <LandingPage onStart={() => navigate('/login')} />
+    </Suspense>
+  );
 };
 
 const PublicAuth: React.FC<{ initialStep?: 'login' | 'signup' }> = ({ initialStep = 'login' }) => {
@@ -41,7 +60,11 @@ const PublicAuth: React.FC<{ initialStep?: 'login' | 'signup' }> = ({ initialSte
   if (isLoggedIn) {
     return <Navigate to="/dashboard" replace />;
   }
-  return <Auth initialStep={initialStep} />;
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <Auth initialStep={initialStep} />
+    </Suspense>
+  );
 };
 
 function App() {

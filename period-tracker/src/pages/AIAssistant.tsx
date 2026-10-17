@@ -167,7 +167,7 @@ export const AIAssistant: React.FC = () => {
       </div>
 
       {/* Chat Messages Container */}
-      <div className="flex-1 glass-card rounded-premium-lg p-6 overflow-y-auto border border-borderPink/50 bg-white/70 space-y-5 scrollbar-thin shadow-inner">
+      <div className="flex-1 glass-card rounded-premium-lg p-6 overflow-y-auto border border-borderPink/50 bg-white/70 dark:bg-[#1A1A23]/80 space-y-5 scrollbar-thin shadow-inner">
         {messages.map(m => {
           const isUser = m.role === 'user';
           return (
@@ -180,7 +180,7 @@ export const AIAssistant: React.FC = () => {
                 className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 shadow-sm ${
                   isUser
                     ? 'bg-accent text-white'
-                    : 'bg-cream text-accent border border-borderPink/60'
+                    : 'bg-cream dark:bg-cream/40 text-accent border border-borderPink/60'
                 }`}
               >
                 {isUser ? <User className="w-4 h-4" /> : <Flower className="w-4.5 h-4.5" />}
@@ -191,7 +191,7 @@ export const AIAssistant: React.FC = () => {
                 className={`max-w-[82%] sm:max-w-[75%] rounded-premium-md p-4 space-y-2 relative shadow-sm leading-relaxed ${
                   isUser
                     ? 'bg-gradient-to-r from-accent to-[#C57E97] text-white rounded-tr-xs'
-                    : 'bg-cream/60 border border-borderPink/50 text-darkText rounded-tl-xs'
+                    : 'bg-cream/60 dark:bg-cream/25 border border-borderPink/50 text-darkText rounded-tl-xs'
                 }`}
               >
                 <div className="flex items-center justify-between gap-4 text-[10px] opacity-75 pb-1 border-b border-white/20">
@@ -241,10 +241,10 @@ export const AIAssistant: React.FC = () => {
         {/* Typing indicator */}
         {loading && (
           <div className="flex items-center gap-3 animate-fade-in">
-            <div className="w-8 h-8 rounded-full bg-cream text-accent border border-borderPink/60 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-full bg-cream dark:bg-cream/40 text-accent border border-borderPink/60 flex items-center justify-center shrink-0">
               <Flower className="w-4.5 h-4.5 animate-spin" />
             </div>
-            <div className="bg-cream/60 border border-borderPink/50 rounded-premium-md px-4 py-3 text-xs text-vintageText/70 flex items-center gap-2">
+            <div className="bg-cream/60 dark:bg-cream/25 border border-borderPink/50 rounded-premium-md px-4 py-3 text-xs text-vintageText/80 dark:text-vintageText flex items-center gap-2">
               <span className="italic font-subtitle text-accent">Flora is consulting holistic biology...</span>
               <div className="flex gap-1 items-center">
                 <span className="w-1.5 h-1.5 rounded-full bg-accent animate-bounce" style={{ animationDelay: '0ms' }}></span>
@@ -260,7 +260,7 @@ export const AIAssistant: React.FC = () => {
 
       {/* Quick Prompts / Dynamic Follow-up Chips */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none shrink-0">
-        <span className="text-[10px] font-bold text-vintageText/60 tracking-wider uppercase font-subtitle shrink-0 pl-1 flex items-center gap-1">
+        <span className="text-[10px] font-bold text-vintageText/70 dark:text-vintageText/80 tracking-wider uppercase font-subtitle shrink-0 pl-1 flex items-center gap-1">
           <Sparkles className="w-3 h-3 text-accent" />
           {dynamicSuggestions.length > 0 ? 'Follow-ups:' : 'Suggestions:'}
         </span>
@@ -268,7 +268,7 @@ export const AIAssistant: React.FC = () => {
           <button
             key={i}
             onClick={() => handleSendMessage(prompt.replace(/^[^\w\s]+\s*/, ''))}
-            className="text-xxs px-3 py-1.5 rounded-full bg-cream/70 hover:bg-primary/40 border border-borderPink/60 text-vintageText font-body whitespace-nowrap transition-colors shadow-2xs hover:border-accent cursor-pointer shrink-0"
+            className="text-xxs px-3 py-1.5 rounded-full bg-cream/70 dark:bg-cream/35 hover:bg-primary/40 border border-borderPink/60 text-vintageText dark:text-darkText font-body whitespace-nowrap transition-colors shadow-2xs hover:border-accent cursor-pointer shrink-0"
           >
             {prompt}
           </button>
@@ -281,7 +281,7 @@ export const AIAssistant: React.FC = () => {
           e.preventDefault();
           handleSendMessage();
         }}
-        className="glass-card rounded-premium-lg p-2.5 border border-borderPink/60 bg-white/90 flex items-center gap-2 shrink-0 shadow-soft-glow"
+        className="glass-card rounded-premium-lg p-2.5 border border-borderPink/60 bg-white/90 dark:bg-[#1A1A23] flex items-center gap-2 shrink-0 shadow-soft-glow"
       >
         <input
           type="text"
@@ -302,7 +302,7 @@ export const AIAssistant: React.FC = () => {
       </form>
 
       {/* Subtle Clinical Disclaimer */}
-      <p className="text-[10px] text-vintageText/50 italic text-center font-subtitle shrink-0">
+      <p className="text-[10px] text-vintageText/75 dark:text-vintageText/90 italic text-center font-subtitle shrink-0">
         Flora AI offers evidence-based cycle education and holistic comfort. In cases of severe pelvic trauma or acute pain, please consult an emergency physician.
       </p>
     </div>

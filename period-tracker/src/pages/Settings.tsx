@@ -4,8 +4,43 @@ import { apiProfile } from '../services/api';
 import { Settings, Shield, Bell, Languages, ShieldAlert, Check, RefreshCw, Cpu } from 'lucide-react';
 
 export const SettingsPage: React.FC = () => {
-  const { profile, updateProfile } = useApp();
+  const { profile, updateProfile, cycles, symptoms, moods, medications, appointments } = useApp();
   const [deviceSyncing, setDeviceSyncing] = useState<string | null>(null);
+
+  const handleExportJSON = () => {
+    try {
+      const backupData = {
+        app: 'Flora Sanctuary Period Tracker',
+        version: '1.0.0',
+        exportedAt: new Date().toISOString(),
+        profile: {
+          name: profile.name,
+          age: profile.age,
+          cycleLength: profile.cycleLength,
+          periodLength: profile.periodLength,
+          lastPeriodStart: profile.lastPeriodStart,
+          waterTarget: profile.waterTarget,
+          theme: profile.theme,
+          connectedDevices: profile.connectedDevices
+        },
+        cycles,
+        symptoms,
+        moods,
+        medications,
+        appointments
+      };
+
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute('href', dataStr);
+      downloadAnchor.setAttribute('download', `Flora_Sanctuary_Backup_${(profile.name || 'Member').replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    } catch (err: any) {
+      alert('Failed to export backup: ' + err.message);
+    }
+  };
 
   const handleToggleNotifications = () => {
     updateProfile({
@@ -118,7 +153,7 @@ export const SettingsPage: React.FC = () => {
 
             <div className="flex gap-3 pt-2">
               <button 
-                onClick={() => alert('Data package compiled and ready for download. 🌸')}
+                onClick={handleExportJSON}
                 className="flex-1 py-2.5 rounded-full border border-borderPink/60 text-xs font-semibold text-vintageText bg-cream hover:bg-secondary/20 transition-colors text-center"
               >
                 Export Cycle JSON Logs
