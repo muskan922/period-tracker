@@ -199,15 +199,21 @@ export const Appointments: React.FC = () => {
 
       {/* Delete Confirmation Modal */}
       {deletingId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-xs p-4 animate-fade-in">
-          <div className="glass-card rounded-premium-lg p-6 max-w-sm w-full border border-red-200 bg-white shadow-luxury space-y-4">
+        <div 
+          onClick={() => setDeletingId(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-fade-in"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="glass-card rounded-premium-lg p-6 max-w-sm w-full border border-red-200 dark:border-red-900/50 bg-white dark:bg-[#1A1A23] shadow-luxury space-y-4"
+          >
             <div className="flex items-center gap-3 text-red-500">
-              <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-red-50 dark:bg-red-950/40 flex items-center justify-center">
                 <AlertCircle className="w-5 h-5 text-red-500" />
               </div>
               <div>
                 <h4 className="font-heading text-base font-semibold text-darkText">Cancel Consultation?</h4>
-                <p className="text-xs text-vintageText/70">Are you sure you want to cancel this scheduled visit?</p>
+                <p className="text-xs text-vintageText/80">Are you sure you want to cancel this scheduled visit?</p>
               </div>
             </div>
             <div className="flex items-center gap-3 pt-2">

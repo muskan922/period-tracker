@@ -106,10 +106,10 @@ export const AIPredictions: React.FC = () => {
             <div key={idx} className={`glass-card rounded-premium-lg p-5 border relative overflow-hidden flex flex-col justify-between ${p.color}`}>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 rounded-full bg-white border border-borderPink/40 flex items-center justify-center">
+                  <div className="w-9 h-9 rounded-full bg-white/90 dark:bg-cream/60 border border-borderPink/40 flex items-center justify-center">
                     <Icon className="w-4.5 h-4.5" />
                   </div>
-                  <span className="px-2.5 py-0.5 rounded-full bg-white/70 border border-accent/20 text-xxs font-bold text-accent font-subtitle uppercase tracking-wider">
+                  <span className="px-2.5 py-0.5 rounded-full bg-white/80 dark:bg-cream/60 border border-accent/20 text-xxs font-bold text-accent font-subtitle uppercase tracking-wider">
                     {p.conf} Est.
                   </span>
                 </div>
@@ -118,7 +118,7 @@ export const AIPredictions: React.FC = () => {
                   <p className="font-heading text-xl text-accent font-bold mt-1">{p.date}</p>
                 </div>
               </div>
-              <p className="text-[10px] text-vintageText/70 leading-relaxed mt-4 pt-3 border-t border-borderPink/25 font-body">
+              <p className="text-[11px] text-vintageText/80 dark:text-vintageText/90 leading-relaxed mt-4 pt-3 border-t border-borderPink/25 font-body">
                 {p.desc}
               </p>
             </div>
@@ -128,15 +128,15 @@ export const AIPredictions: React.FC = () => {
 
       {/* Pattern Insights Banner */}
       {patternInsights && patternInsights.length > 0 && (
-        <div className="glass-card rounded-premium-lg p-5 border border-accent/20 bg-cream/40 space-y-2">
+        <div className="glass-card rounded-premium-lg p-5 border border-accent/20 bg-cream/40 dark:bg-cream/15 space-y-2">
           <h4 className="font-heading text-sm font-semibold text-darkText flex items-center gap-2">
             <span>✨ Personal Pattern Engine Insights</span>
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {patternInsights.slice(0, 4).map(ins => (
-              <div key={ins.id} className="p-3 bg-white/80 rounded-premium-md border border-borderPink/40 text-xs">
+              <div key={ins.id} className="p-3 bg-white/85 dark:bg-cream/30 rounded-premium-md border border-borderPink/40 text-xs">
                 <div className="font-semibold text-accent font-subtitle">{ins.icon || '📌'} {ins.title}</div>
-                <div className="text-[11px] text-vintageText/80 font-body mt-0.5">{ins.description}</div>
+                <div className="text-[11px] text-vintageText/85 dark:text-vintageText/95 font-body mt-0.5">{ins.description}</div>
               </div>
             ))}
           </div>
@@ -148,9 +148,9 @@ export const AIPredictions: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-borderPink/30">
           <div>
             <h3 className="font-heading text-lg font-semibold text-darkText">Curated Hormonal Waves (Estrogen vs Progesterone)</h3>
-            <p className="font-subtitle text-xs text-vintageText/55 italic">Mapping hormone curves across your {cycleEngine.averageCycleLength}-day cycle. Day {cycleEngine.currentCycleDay} highlighted.</p>
+            <p className="font-subtitle text-xs text-vintageText/75 dark:text-vintageText/90 italic">Mapping hormone curves across your {cycleEngine.averageCycleLength}-day cycle. Day {cycleEngine.currentCycleDay} highlighted.</p>
           </div>
-          <span className="px-3.5 py-1.5 rounded-full bg-cream border border-borderPink/50 text-xxs font-semibold flex items-center gap-1.5 text-vintageText shadow-soft-glow self-start sm:self-auto">
+          <span className="px-3.5 py-1.5 rounded-full bg-cream dark:bg-cream/40 border border-borderPink/50 text-xxs font-semibold flex items-center gap-1.5 text-vintageText dark:text-darkText shadow-soft-glow self-start sm:self-auto">
             <ShieldCheck className="w-3.5 h-3.5 text-success" />
             Biological Cycle Model
           </span>

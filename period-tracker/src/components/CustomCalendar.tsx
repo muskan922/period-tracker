@@ -245,19 +245,19 @@ export const CustomCalendar: React.FC = () => {
             <span>Period days</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded bg-emerald-50 border border-emerald-300/40 inline-block shrink-0" />
+            <span className="w-3.5 h-3.5 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300/40 inline-block shrink-0" />
             <span>Fertility window</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded bg-amber-100 border border-amber-300/50 inline-block shrink-0" />
+            <span className="w-3.5 h-3.5 rounded bg-amber-100 dark:bg-amber-950/40 border border-amber-300/50 inline-block shrink-0" />
             <span>Ovulation day</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded bg-sky-100 border border-sky-300/40 inline-block shrink-0" />
+            <span className="w-3.5 h-3.5 rounded bg-sky-100 dark:bg-sky-950/40 border border-sky-300/40 inline-block shrink-0" />
             <span>Appointment</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded bg-purple-100 border border-purple-300/40 inline-block shrink-0" />
+            <span className="w-3.5 h-3.5 rounded bg-purple-100 dark:bg-purple-950/40 border border-purple-300/40 inline-block shrink-0" />
             <span>Medication logs</span>
           </div>
         </div>
@@ -272,7 +272,7 @@ export const CustomCalendar: React.FC = () => {
             </div>
             <div>
               <h3 className="font-heading text-lg font-semibold text-darkText">Day Summary</h3>
-              <p className="text-xs text-vintageText/50 font-subtitle">{selectedDateStr}</p>
+              <p className="text-xs text-vintageText/75 dark:text-vintageText/90 font-subtitle">{selectedDateStr}</p>
             </div>
           </div>
 
@@ -282,19 +282,19 @@ export const CustomCalendar: React.FC = () => {
               <span className="text-[10px] uppercase font-semibold text-accent tracking-wider font-subtitle">Phase Indicator</span>
               <div className="mt-1.5 flex items-center gap-2">
                 {selectedStatus?.isPeriod ? (
-                  <span className="px-3 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
+                  <span className="px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-200 text-xs font-semibold">
                     Menstrual Cycle Phase
                   </span>
                 ) : selectedStatus?.isOvulation ? (
-                  <span className="px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold">
+                  <span className="px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-200 text-xs font-semibold">
                     Ovulation Day Peak
                   </span>
                 ) : selectedStatus?.isFertile ? (
-                  <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
+                  <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-200 text-xs font-semibold">
                     Follicular Phase (Fertile)
                   </span>
                 ) : (
-                  <span className="px-3 py-1 rounded-full bg-cream border border-borderPink text-vintageText/80 text-xs font-medium">
+                  <span className="px-3 py-1 rounded-full bg-cream dark:bg-cream/40 border border-borderPink text-vintageText/80 dark:text-vintageText text-xs font-medium">
                     Luteal Phase (Cozy rest)
                   </span>
                 )}
@@ -305,7 +305,7 @@ export const CustomCalendar: React.FC = () => {
             <div>
               <span className="text-[10px] uppercase font-semibold text-accent tracking-wider font-subtitle font-medium">Emotion Tracked</span>
               {selectedStatus?.dayMood ? (
-                <div className="mt-1.5 flex items-center gap-2.5 bg-cream/50 p-2.5 rounded-premium-md border border-borderPink/30">
+                <div className="mt-1.5 flex items-center gap-2.5 bg-cream/50 dark:bg-cream/20 p-2.5 rounded-premium-md border border-borderPink/30">
                   <span className="text-xl">
                     {selectedStatus.dayMood === 'Happy' && '🌸'}
                     {selectedStatus.dayMood === 'Calm' && '🍃'}
@@ -317,14 +317,14 @@ export const CustomCalendar: React.FC = () => {
                   <span className="text-xs font-medium text-darkText font-body">{selectedStatus.dayMood}</span>
                 </div>
               ) : (
-                <p className="text-xs text-vintageText/55 italic mt-1 font-body">No emotional log today.</p>
+                <p className="text-xs text-vintageText/75 dark:text-vintageText/90 italic mt-1 font-body">No emotional log today.</p>
               )}
             </div>
 
             {/* Daily Vitals Note */}
             <div>
               <span className="text-[10px] uppercase font-semibold text-accent tracking-wider font-subtitle">Sanctuary Log Journal</span>
-              <p className="text-xs leading-relaxed text-vintageText/80 mt-1.5 p-3 rounded-premium-md bg-cream/30 border border-dashed border-borderPink/70">
+              <p className="text-xs leading-relaxed text-vintageText/85 mt-1.5 p-3 rounded-premium-md bg-cream/30 dark:bg-cream/15 border border-dashed border-borderPink/70">
                 {selectedStatus?.note ? selectedStatus.note : "No journal written for this day. Click \"Mood Journal\" in the sidebar to add a personal reflection."}
               </p>
             </div>
@@ -333,12 +333,12 @@ export const CustomCalendar: React.FC = () => {
             <div>
               <span className="text-[10px] uppercase font-semibold text-accent tracking-wider font-subtitle">Reminders Log</span>
               {selectedStatus?.hasMedication ? (
-                <div className="mt-2 text-xs flex items-center gap-1.5 text-purple-600 font-semibold bg-purple-50/50 p-2 rounded-premium-md">
+                <div className="mt-2 text-xs flex items-center gap-1.5 text-purple-600 dark:text-purple-300 font-semibold bg-purple-50/50 dark:bg-purple-950/40 p-2 rounded-premium-md">
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-ping" />
                   Medicines logged as taken.
                 </div>
               ) : (
-                <p className="text-xs text-vintageText/55 italic mt-1.5 font-body">No reminders logged today.</p>
+                <p className="text-xs text-vintageText/75 dark:text-vintageText/90 italic mt-1.5 font-body">No reminders logged today.</p>
               )}
             </div>
           </div>

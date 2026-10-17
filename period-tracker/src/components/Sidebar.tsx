@@ -147,8 +147,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, setCurrentTab }) =
           </div>
 
           <div className="flex-1 min-w-0">
-            <h4 className="text-xs font-semibold text-[#4B3B45] truncate font-heading">{profile.name}</h4>
-            <p className="text-[13px] text-[#4B3B45]/90 truncate font-subtitle italic">Active cycle log ❤️</p>
+            <h4 className="text-xs font-semibold text-darkText truncate font-heading">{profile.name}</h4>
+            <p className="text-[13px] text-vintageText/90 truncate font-subtitle italic">Active cycle log ❤️</p>
           </div>
 
           <button

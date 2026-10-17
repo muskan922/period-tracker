@@ -217,7 +217,7 @@ export const PeriodTracker: React.FC = () => {
                       <button 
                         onClick={() => deleteCycle(c.id)}
                         title="Delete log"
-                        className="absolute top-4 right-4 text-vintageText/45 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute top-4 right-4 text-vintageText/60 hover:text-red-500 opacity-80 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -227,7 +227,7 @@ export const PeriodTracker: React.FC = () => {
                           <h4 className="font-heading text-base font-semibold text-darkText">
                             Cycle Log #{cycles.length - idx}
                           </h4>
-                          <p className="text-[10px] text-vintageText/55 font-subtitle italic">
+                          <p className="text-[11px] text-vintageText/75 dark:text-vintageText/90 font-subtitle italic">
                             {c.startDate} to {c.endDate}
                           </p>
                         </div>

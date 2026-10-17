@@ -497,8 +497,8 @@ header.glass-panel {
   background: linear-gradient(to right, transparent, var(--divider-color) 20%, var(--divider-color) 80%, transparent);
 }
 
-/* Wax Seal Buttons */
-button.bg-accent, button[type="submit"] {
+/* Primary & Wax Seal Buttons */
+.wax-seal-btn {
   background: var(--button-primary-bg) !important;
   color: var(--button-primary-text) !important;
   border: 1.5px solid var(--rosegold) !important;
@@ -508,15 +508,25 @@ button.bg-accent, button[type="submit"] {
   position: relative;
 }
 
-button.bg-accent::before, button[type="submit"]::before {
+.wax-seal-btn::before {
   content: "🌸";
   font-size: 8px;
   margin-right: 4px;
 }
 
-button.bg-accent:hover, button[type="submit"]:hover {
+.wax-seal-btn:hover {
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 8px 25px var(--glow-hover-color) !important;
+}
+
+button.bg-accent {
+  box-shadow: var(--button-glow);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button.bg-accent:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 20px var(--glow-hover-color);
 }
 
 /* Forms: Handwritten Stationary Style */

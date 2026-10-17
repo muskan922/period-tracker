@@ -498,7 +498,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             </ResponsiveContainer>
           </div>
 
-          <p className="text-[10px] text-vintageText/60 leading-normal font-body text-center mt-1">
+          <p className="text-[11px] text-vintageText/80 leading-normal font-body text-center mt-1">
             Progesterone rising curves cause a gradual decrease in energetic output. Reserve high-stress tasks.
           </p>
         </div>
@@ -513,7 +513,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             </div>
             <div>
               <h3 className="font-heading text-xl font-bold text-darkText">Cycle & Events Calendar</h3>
-              <p className="text-xs text-vintageText/60 font-subtitle">Interactive calendar view for tracking cycles and events</p>
+              <p className="text-xs text-vintageText/80 font-subtitle">Interactive calendar view for tracking cycles and events</p>
             </div>
           </div>
         </div>
@@ -541,7 +541,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
                   key={m.id}
                   className={`flex items-center justify-between p-3 rounded-premium-md border transition-all duration-300 ${isTaken
                     ? 'bg-rose-50/40 border-rose-300/50 opacity-80'
-                    : 'bg-[#FFFDF8]-50/30 border-borderPink opacity-80'
+                    : 'bg-cream/40 border-borderPink/40 opacity-90'
                     }`}
                 >
                   <div className="flex items-center gap-3">
@@ -649,8 +649,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
       {/* AI Wisdom Modal */}
       {showWisdomModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md transition-opacity duration-300">
-          <div className="relative w-full max-w-lg glass-card rounded-premium-lg p-6 max-h-[85vh] overflow-y-auto space-y-4 animate-scale-up">
+        <div 
+          onClick={() => setShowWisdomModal(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md transition-opacity duration-300"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-lg glass-card rounded-premium-lg p-6 max-h-[85vh] overflow-y-auto space-y-4 animate-scale-up"
+          >
             <button
               onClick={() => setShowWisdomModal(false)}
               className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center bg-cream border border-borderPink text-vintageText hover:bg-secondary/40 transition-colors"

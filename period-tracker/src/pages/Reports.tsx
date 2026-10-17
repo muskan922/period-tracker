@@ -304,7 +304,7 @@ export const Reports: React.FC = () => {
           {/* CSV Export Button */}
           <button
             onClick={handleExportCSV}
-            className="py-2.5 px-4 rounded-full border border-borderPink/70 bg-white/80 hover:bg-cream text-vintageText text-xs font-semibold tracking-wider uppercase transition-all shadow-sm flex items-center gap-2 cursor-pointer"
+            className="py-2.5 px-4 rounded-full border border-borderPink/70 bg-white/80 dark:bg-cream/40 hover:bg-cream dark:hover:bg-cream/60 text-vintageText dark:text-darkText text-xs font-semibold tracking-wider uppercase transition-all shadow-sm flex items-center gap-2 cursor-pointer"
           >
             <Table className="w-3.5 h-3.5 text-accent" />
             <span>Export CSV</span>
@@ -313,7 +313,7 @@ export const Reports: React.FC = () => {
           {/* Print Button */}
           <button
             onClick={handlePrint}
-            className="py-2.5 px-4 rounded-full border border-borderPink/70 bg-white/80 hover:bg-cream text-vintageText text-xs font-semibold tracking-wider uppercase transition-all shadow-sm flex items-center gap-2 cursor-pointer"
+            className="py-2.5 px-4 rounded-full border border-borderPink/70 bg-white/80 dark:bg-cream/40 hover:bg-cream dark:hover:bg-cream/60 text-vintageText dark:text-darkText text-xs font-semibold tracking-wider uppercase transition-all shadow-sm flex items-center gap-2 cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5 text-accent" />
             <span>Print Sheet</span>
@@ -333,14 +333,14 @@ export const Reports: React.FC = () => {
 
       {/* Feedback Toast */}
       {exportNotice && (
-        <div className="p-3.5 rounded-premium-md bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center gap-2 animate-fade-in no-print">
+        <div className="p-3.5 rounded-premium-md bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-xs font-medium flex items-center gap-2 animate-fade-in no-print">
           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           <span>{exportNotice}</span>
         </div>
       )}
 
       {/* Printable Clinical Sheet Card */}
-      <div className="glass-card rounded-premium-lg p-8 space-y-8 border border-borderPink/60 bg-white/95 relative shadow-luxury printable-report">
+      <div className="glass-card rounded-premium-lg p-8 space-y-8 border border-borderPink/60 bg-white/95 dark:bg-[#1A1A23] relative shadow-luxury printable-report">
         
         {/* Report Header */}
         <div className="flex justify-between items-start border-b border-borderPink/40 pb-6">
@@ -351,7 +351,7 @@ export const Reports: React.FC = () => {
             </div>
             <p className="font-subtitle text-xs text-accent italic font-semibold mt-0.5">Biometric & Menstrual Cycle Portfolio</p>
           </div>
-          <div className="text-right text-xs text-vintageText/70 space-y-0.5 font-subtitle">
+          <div className="text-right text-xs text-vintageText/80 dark:text-vintageText/90 space-y-0.5 font-subtitle">
             <p><strong className="text-darkText">Subject:</strong> {profile.name}</p>
             <p><strong className="text-darkText">Age:</strong> {profile.age} years</p>
             <p><strong className="text-darkText">Generated Date:</strong> {todayStr}</p>
@@ -362,25 +362,25 @@ export const Reports: React.FC = () => {
         <div className="space-y-3">
           <h3 className="font-heading text-xl text-darkText italic border-l-4 border-accent pl-3">I. Cycle Parameters</h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-1">
-            <div className="bg-cream/40 p-3.5 rounded-premium-md border border-borderPink/30">
-              <span className="text-xxs font-bold text-vintageText/60 tracking-wider uppercase font-subtitle">Avg Cycle Length</span>
+            <div className="bg-cream/40 dark:bg-cream/20 p-3.5 rounded-premium-md border border-borderPink/30">
+              <span className="text-xxs font-bold text-vintageText/70 dark:text-vintageText/80 tracking-wider uppercase font-subtitle">Avg Cycle Length</span>
               <p className="font-heading text-xl text-accent font-bold mt-1">{avgCycleLength} Days</p>
-              <p className="text-[10px] text-vintageText/55 font-subtitle italic">Variability: ±{cycleEngine.cycleVariability}d</p>
+              <p className="text-[11px] text-vintageText/75 dark:text-vintageText/90 font-subtitle italic">Variability: ±{cycleEngine.cycleVariability}d</p>
             </div>
-            <div className="bg-cream/40 p-3.5 rounded-premium-md border border-borderPink/30">
-              <span className="text-xxs font-bold text-vintageText/60 tracking-wider uppercase font-subtitle">Avg Period Length</span>
+            <div className="bg-cream/40 dark:bg-cream/20 p-3.5 rounded-premium-md border border-borderPink/30">
+              <span className="text-xxs font-bold text-vintageText/70 dark:text-vintageText/80 tracking-wider uppercase font-subtitle">Avg Period Length</span>
               <p className="font-heading text-xl text-accent font-bold mt-1">{avgPeriodLength} Days</p>
-              <p className="text-[10px] text-vintageText/55 font-subtitle italic">Active duration</p>
+              <p className="text-[11px] text-vintageText/75 dark:text-vintageText/90 font-subtitle italic">Active duration</p>
             </div>
-            <div className="bg-cream/40 p-3.5 rounded-premium-md border border-borderPink/30">
-              <span className="text-xxs font-bold text-vintageText/60 tracking-wider uppercase font-subtitle">Avg Sleep</span>
+            <div className="bg-cream/40 dark:bg-cream/20 p-3.5 rounded-premium-md border border-borderPink/30">
+              <span className="text-xxs font-bold text-vintageText/70 dark:text-vintageText/80 tracking-wider uppercase font-subtitle">Avg Sleep</span>
               <p className="font-heading text-xl text-accent font-bold mt-1">{avgSleep} hrs/night</p>
-              <p className="text-[10px] text-vintageText/55 font-subtitle italic">Personal baseline</p>
+              <p className="text-[11px] text-vintageText/75 dark:text-vintageText/90 font-subtitle italic">Personal baseline</p>
             </div>
-            <div className="bg-cream/40 p-3.5 rounded-premium-md border border-borderPink/30">
-              <span className="text-xxs font-bold text-vintageText/60 tracking-wider uppercase font-subtitle">Avg Hydration</span>
+            <div className="bg-cream/40 dark:bg-cream/20 p-3.5 rounded-premium-md border border-borderPink/30">
+              <span className="text-xxs font-bold text-vintageText/70 dark:text-vintageText/80 tracking-wider uppercase font-subtitle">Avg Hydration</span>
               <p className="font-heading text-xl text-accent font-bold mt-1">{avgWater} ml/day</p>
-              <p className="text-[10px] text-vintageText/55 font-subtitle italic">Daily baseline</p>
+              <p className="text-[11px] text-vintageText/75 dark:text-vintageText/90 font-subtitle italic">Daily baseline</p>
             </div>
           </div>
         </div>
